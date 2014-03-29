@@ -30,6 +30,7 @@ User generates "defense" regex pattern; must match "attack" but not
 #  7. For more complex attacks, it may be interesting to repeat them just in
 #     order to see how many different defenses the user can supply. Keep
 #     repeating until user fails — or even a little after that.
+#  8. If \w appears a lot, add whitespace.
 
 import re
 import random
