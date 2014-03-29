@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # blaster.py
 # David Prager Branner
+# 20140328
 
 """Game to improve regex skills.
 
@@ -11,7 +12,7 @@ User generates "defense" regex pattern; must match "attack" but not
 """
 
 # For later:
-#  1. Handle near-identical entries:
+#  1. Handle near-identical defenses:
 #   a. evaluate by edit-distance;
 #   a. handle by repeating attack string; repeat defense barred;
 #   b. handle by delaying efficacy, thus increasing risk of hit (San's
@@ -24,8 +25,8 @@ User generates "defense" regex pattern; must match "attack" but not
 #  4. Invalid defense string may lead to score reduction or other penalties.
 #  5. Evaluate quality of defense for more scores or greater level increase.
 #  6. Figure damage (from hits); it may affect time of defense's effect..
-#  7. In addition to near-identical entries, entries consisting only of literal
-#     letters plus a few wild-cards should also be subject to penalty.
+#  7. In addition to near-identical defenses, defenses consisting only of
+#     literal letters plus a few wild-cards should also be subject to penalty.
 
 import re
 import random
