@@ -25,6 +25,9 @@ User generates "defense" regex pattern; must match "attack" but not
 #  4. Invalid defense string may lead to score reduction or other penalties.
 #  5. Evaluate quality of defense for more scores or greater level increase.
 #  6. Figure damage (from hits); it may affect time of defense's effect..
+#  7. For more complex attacks, it may be interesting to repeat them just in
+#     order to see how many different defenses the user can supply. Keep
+#     repeating until user fails — or even a little after that.
 
 import re
 import random
