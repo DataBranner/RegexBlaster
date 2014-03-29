@@ -13,7 +13,7 @@ User generates "defense" regex pattern; must match "attack" but not
 
 # For later:
 #  1. Handle near-identical defenses:
-#   a. evaluate by edit-distance;
+#   a. evaluate by edit-distance vis-à-vis all previous defenses;
 #   a. handle by repeating attack string; repeat defense barred;
 #   b. handle by delaying efficacy, thus increasing risk of hit (San's
 #      suggestion); this requires implementing timing.
@@ -25,8 +25,6 @@ User generates "defense" regex pattern; must match "attack" but not
 #  4. Invalid defense string may lead to score reduction or other penalties.
 #  5. Evaluate quality of defense for more scores or greater level increase.
 #  6. Figure damage (from hits); it may affect time of defense's effect..
-#  7. In addition to near-identical defenses, defenses consisting only of
-#     literal letters plus a few wild-cards should also be subject to penalty.
 
 import re
 import random
@@ -48,10 +46,9 @@ def main():
         noncombatant = generate_string()
         while True:
             # Report battle state.
-            print('''Score {:>4} Level {:>4} Damage {:>4} Attack {:>10} '''
-                    '''Non-c {:>10}'''.
-                    format(score, round(level, 1), damage, attack, 
-                        noncombatant), end=' ')
+            print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
+                    '''Attack {:>10} Non-c {:>10}'''.
+                    format(score, level, damage, attack, noncombatant), end=' ')
             # Collect "defense" (user regex).
             defense = input('load: ')
             # Check defense against past regexes; invalidate if found.
@@ -62,7 +59,6 @@ def main():
                 defense_record.add(defense)
                 break
         # Test defense against "attack" and "noncombatant".
-        print('here')
         attack_successful = False
         collateral_damage = False
         try:
