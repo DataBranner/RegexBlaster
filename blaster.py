@@ -13,7 +13,8 @@ User generates "defense" regex pattern; must match "attack" but not
 
 # For later:
 #  1. Handle near-identical defenses:
-#   a. evaluate by edit-distance vis-à-vis all previous defenses;
+#   a. evaluate by edit-distance vis-à-vis all previous defenses; edit-distance
+#      over average string-length may be a more useful than edit-distance alone.
 #   a. handle by repeating attack string; repeat defense barred;
 #   b. handle by delaying efficacy, thus increasing risk of hit (San's
 #      suggestion); this requires implementing timing.
