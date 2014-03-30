@@ -9,6 +9,8 @@ import re
 import random
 import string
 
+looprange = 10
+
 def test_choose_charset_01():
     assert B.choose_charset('a') == string.ascii_lowercase
 
@@ -26,6 +28,16 @@ def test_choose_charset_05():
 
 def test_choose_charset_06():
     assert B.choose_charset('0') == '0123456789'
+
+def test_generate_string_01():
+    """Test prescribed exact length."""
+    for i in range(looprange):
+        length = 1 + int(1 / random.random()) * 10
+        assert len(B.generate_string(length)) == length 
+
+def test_generate_string_02():
+    """Test for presence of space."""
+    assert re.search(' ', B.generate_string(100, 'aA ')).group() == ' '
 
 def test_assess_defense_single_01():
     pass

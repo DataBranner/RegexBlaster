@@ -116,6 +116,9 @@ def choose_charset(typestring='aA'):
         charset += ' ' * (len(charset) // 2)
     return charset
 
-def generate_string(length=5, typestring='aA'):
+def generate_string(length=5, typestring='aA', varying=False):
+    if varying:
+        # Must call a more complicated function, not yet written
+        pass
     charset = choose_charset(typestring)
     return ''.join([random.choice(charset) for i in range(length)])
