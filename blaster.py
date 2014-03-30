@@ -65,20 +65,8 @@ def main():
                 defense_record.add(defense)
                 break
         # Test defense against "attack" and "noncombatant".
-        attack_successful = False
-        collateral_damage = False
-        try:
-            match = re.search(defense, attack).group()
-        except AttributeError:
-            match = None
-        if attack == match:
-            attack_successful = True
-        try:
-            match = re.search(defense, noncombatant).group()
-        except AttributeError:
-            match = None
-        if attack == match:
-            collateral_damage = True
+        attack_successful, collateral_damage = (
+                assess_defense(defense, attack, noncombatant))
         if attack_successful and not collateral_damage:
             # Defeat attack
             print('Successful defense without non-combatant casualties.')
@@ -94,5 +82,36 @@ def main():
             # Hit increases damage
             damage -= 1
 
-def generate_string():
-    return ''.join([random.choice(string.ascii_letters) for i in range(5)])
+def assess_defense_single(defense, attack, noncombatant):
+    """Determine success of defense and collaterals in single-attack event."""
+    # Attack; later we need to be able to handle multiple attacks.
+    attack_successful = False
+    try:
+        match = re.search(defense, attack).group()
+    except AttributeError:
+        match = None
+    if attack == match:
+        attack_successful = True
+    # Non-targets (penalty for hitting); later need to handle multiple.
+    collateral_damage = False
+    try:
+        match = re.search(defense, noncombatant).group()
+    except AttributeError:
+        match = None
+    if attack == match:
+        collateral_damage = True
+    return attack_successful, collateral_damage
+
+def choose_charset(typestring=''):
+    charset = ''
+    if 'a' in typestring:
+        charset += string.ascii_lowercase
+    if 'A' in typestring:
+        charset += string.ascii_uppercase
+    if '0' in typestring:
+        charset += string.digits
+
+def generate_string(length=5, typestring='aA'):
+    if 'a' in typestring:
+
+    return ''.join([random.choice(string.ascii_letters) for i in range(length)])
