@@ -98,7 +98,7 @@ def assess_defense_single(defense, attack, noncombatant):
         match = re.search(defense, noncombatant).group()
     except AttributeError:
         match = None
-    if attack == match:
+    if noncombatant == match:
         collateral_damage = True
     return attack_successful, collateral_damage
 
