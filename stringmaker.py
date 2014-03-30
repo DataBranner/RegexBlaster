@@ -5,7 +5,7 @@
 import string
 import random
 
-def string_w_repeats(w_space=False, w_tab=False, w_CR=False):
+def string_w_repeats(fill_w_space=False, fill_w_tab=False, fill_w_CR=False):
     germ_stuff = string.ascii_lowercase
     fill_stuff = string.ascii_uppercase
     repeats = random.randint(2, 5)
