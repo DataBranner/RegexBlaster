@@ -102,7 +102,7 @@ def assess_defense_single(defense, attack, noncombatant):
         collateral_damage = True
     return attack_successful, collateral_damage
 
-def choose_charset(typestring=''):
+def choose_charset(typestring='aA'):
     charset = ''
     if 'a' in typestring:
         charset += string.ascii_lowercase
@@ -110,8 +110,12 @@ def choose_charset(typestring=''):
         charset += string.ascii_uppercase
     if '0' in typestring:
         charset += string.digits
+    if '.' in typestring:
+        charset += string.punctuation
+    if ' ' in typestring:
+        charset += ' ' * (len(charset) // 2)
+    return charset
 
 def generate_string(length=5, typestring='aA'):
-    if 'a' in typestring:
-
-    return ''.join([random.choice(string.ascii_letters) for i in range(length)])
+    charset = choose_charset(typestring)
+    return ''.join([random.choice(charset) for i in range(length)])
