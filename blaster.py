@@ -73,11 +73,10 @@ def main():
         while True:
             # Report battle state.
             print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
-                    '''Attack {:>10} Non-c {:>10}'''.
-                    format(s.score, s.level, s.damage, attack, noncombatant), 
-                    end=' ')
+                    '''Attack {:>10} Non-c {:>10}'''.format(s.score, s.level, 
+                        s.damage, attack, noncombatant))
             # Collect "defense" (user regex).
-            defense = input('load: ')
+            defense = input(' load: ')
             # Check defense against past regexes; invalidate if found.
             if defense in s.defense_record:
                 print('This defense has already been used.')
@@ -89,6 +88,8 @@ def main():
         attack_successful, collateral_damage = (
                 s.assess_defense_single(defense, attack, noncombatant))
         s.score_defense(attack, attack_successful, collateral_damage)
+    if s.damage <= 0:
+        print('\nYour player has been destroyed in battle. Game over.')
 
 def choose_charset(typestring='aA'):
     charset = ''

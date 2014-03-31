@@ -83,3 +83,36 @@ def test_assess_defense_single_06():
         assert s.assess_defense_single('\W*', B.generate_string(20), '') == (
                 False, True)
 
+# Begin tests of score_defense()
+
+attack = 'abcde'
+
+def test_score_defense_01():
+    """Test that record is kept of successful defense."""
+    s = B.Scorer()
+    s.score_defense(attack, True, False)
+    assert attack in s.defeated_attacks
+
+def test_score_defense_02():
+    """Test that score and level change on successful defense."""
+    s = B.Scorer()
+    s.score_defense(attack, True, False)
+    assert s.score == 1 and s.level == 1.1
+
+def test_score_defense_03():
+    """Test that score and level do not change on collateral damage."""
+    s = B.Scorer()
+    s.score_defense(attack, True, True)
+    assert s.score == -1 and s.level == 1
+
+def test_score_defense_04():
+    """Test that damage drops; score/level do not change on collateral damage"""
+    s = B.Scorer()
+    s.score_defense(attack, False, True)
+    assert s.damage == 9 and s.score == -1 and s.level == 1
+
+def test_score_defense_05():
+    s = B.Scorer()
+    s.score_defense(attack, False, False)
+    assert s.damage == 9 and s.score == 0 and s.level == 1
+
