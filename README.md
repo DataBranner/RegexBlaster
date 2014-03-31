@@ -8,6 +8,8 @@ An arcade game to practice regular expressions.
 
  1. Show partial matches in real time.
  
+ 1. Multiple attack and/or noncombatant strings. More points for multiple matches at once.
+
  1. User corrects regex offered by machine.
 
  1. Handle near-identical defenses:
@@ -17,8 +19,6 @@ An arcade game to practice regular expressions.
   2. handle by delaying efficacy, thus increasing risk of hit (San's  suggestion); this requires implementing timing.
 
  1. Generate progressively more complex attack strings. There are presumably ways to do this formulaically. We should also try to create noncombatant strings and attack strings in such a way as to be difficult to distinguish.
-
- 1. In future we may want multiple attack and/or noncombatant strings.
 
  1. Invalid defense string may lead to score reduction or other penalties.
 
