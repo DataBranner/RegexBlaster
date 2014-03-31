@@ -15,9 +15,12 @@ ECMA-48
 termcap
 terminfo
 
-line discipline
+terminal line discipline: layer connecting terminal's character device interface to hardware driver.
 
-"raw vs. cooked"
+terminal modes: "raw" vs. "cooked" (or noraw). 
+    cooked: the default; preprocesses whole lines.
+    raw: character-by-character input; this must be set manually.
+    An intermediate mode is "cbreak" (or rare); allows some control characters to be interpreted for rapid handling.
 
 
 # begin video c. 13:00
@@ -181,4 +184,13 @@ Urwid:
     documentation: excess.org/urwid/docs
     tutorials: excess.org/urwid/docs/tutorial/index.html#urwid-tutorial
     manual: excess.org/urwid/docs/manual/index.html#urwid-manual
+
+timer: use Python and then refresh screen
+
+unicode in ncurses:
+# https://www.youtube.com/watch?feature=player_detailpage&v=eN1eZtjLEnU#t=1490
+spotty; urwid better
+
+tput can be used to assign color names to colors
+otherwise, in curses, declare color pairs
 
