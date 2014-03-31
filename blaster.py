@@ -67,6 +67,7 @@ def main():
         # Test defense against "attack" and "noncombatant".
         attack_successful, collateral_damage = (
                 assess_defense(defense, attack, noncombatant))
+        score_defense(attack_successful, collateral_damage)
         if attack_successful and not collateral_damage:
             # Defeat attack
             print('Successful defense without non-combatant casualties.')
@@ -82,6 +83,9 @@ def main():
             # Hit increases damage
             damage -= 1
 
+def score_defense(attack_successful, collateral_damage):
+    # will use class for this
+    pass
 def assess_defense_single(defense, attack, noncombatant):
     """Determine success of defense and collaterals in single-attack event."""
     # Attack; later we need to be able to handle multiple attacks.

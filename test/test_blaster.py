@@ -48,6 +48,7 @@ def test_assess_defense_single_01():
                 True, False)
 
 def test_assess_defense_single_02():
+    """Test characters present in both strings."""
     for i in range(looprange):
         assert B.assess_defense_single('.+', B.generate_string(20),
                 B.generate_string(20)) == (True, True)
