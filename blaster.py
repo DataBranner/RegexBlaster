@@ -70,26 +70,30 @@ def main():
         attack = generate_string()
         # Generate "noncombatant" string (must be matched to avoid score-loss)
         noncombatant = generate_string()
-        while True:
-            # Report battle state.
-            print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
-                    '''Attack {:>10} Non-c {:>10}'''.format(s.score, s.level, 
-                        s.damage, attack, noncombatant))
-            # Collect "defense" (user regex).
-            defense = input(' load: ')
-            # Check defense against past regexes; invalidate if found.
-            if defense in s.defense_record:
-                print('This defense has already been used.')
-                continue
-            else:
-                s.defense_record.add(defense)
-                break
+        # Battle state loop.
+        report_battle_state(s, defense, attack, noncombatant)
         # Test defense against "attack" and "noncombatant".
         attack_successful, collateral_damage = (
                 s.assess_defense_single(defense, attack, noncombatant))
         s.score_defense(attack, attack_successful, collateral_damage)
     if s.damage <= 0:
         print('\nYour player has been destroyed in battle. Game over.')
+
+def report_battle_state(s, defense, attack, noncombatant):
+    while True:
+        # Report battle state.
+        print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
+                '''Attack {:>10} Non-c {:>10}'''.format(s.score, s.level, 
+                    s.damage, attack, noncombatant))
+        # Collect "defense" (user regex).
+        defense = input(' load: ')
+        # Check defense against past regexes; invalidate if found.
+        if defense in s.defense_record:
+            print('This defense has already been used.')
+            continue
+        else:
+            s.defense_record.add(defense)
+            return
 
 def choose_charset(typestring='aA'):
     charset = ''
