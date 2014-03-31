@@ -95,16 +95,20 @@ def report_battle_state(s, defense, attack, noncombatant):
             s.defense_record.add(defense)
             return
 
+charset_dict = {
+        'a': string.ascii_lowercase,
+        'A': string.ascii_uppercase,
+        '0': string.digits,
+        '.': string.punctuation,
+        }
+
 def choose_charset(typestring='aA'):
     charset = ''
-    if 'a' in typestring:
-        charset += string.ascii_lowercase
-    if 'A' in typestring:
-        charset += string.ascii_uppercase
-    if '0' in typestring:
-        charset += string.digits
-    if '.' in typestring:
-        charset += string.punctuation
+    for item in typestring:
+        if item == ' ':
+            continue
+        charset += charset_dict[item]
+    # Spaces must follow all others since their numbers are proportional.
     if ' ' in typestring:
         charset += ' ' * (len(charset) // 2)
     return charset
