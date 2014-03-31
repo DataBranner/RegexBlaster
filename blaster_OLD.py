@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # blaster.py
 # David Prager Branner
-# 20140330
+# 20140328
 
 """Game to improve regex skills.
 
@@ -36,36 +36,15 @@ import re
 import random
 import string
 
-class Scorer():
-    def __init__(self):
-        self.score = 0
-        self.level = 1
-        self.damage = 10
-        self.defense_record = set()
-        self.defeated_attacks = []
-        self.martyred_noncombatants = []
-
-    def score_defense(self, attack, attack_successful, collateral_damage):
-        """Update score, damage, and level based on defense results."""
-        if attack_successful and not collateral_damage:
-            # Defeat attack
-            print('Successful defense without non-combatant casualties.')
-            self.defeated_attacks.append(attack)
-            self.score += 1 * self.level
-            self.level += .1
-        elif collateral_damage:
-            print('Non-combatant casualties!')
-            # Assess penalty
-            self.score -= 1 * self.level
-        if not attack_successful:
-            print('Defense failed!')
-            # Hit increases damage
-            self.damage -= 1
-
-
 def main():
-    s = Scorer()
-    while s.damage > 0:
+    # Set up variables
+    score = 0
+    level = 1
+    damage = 10
+    defense_record = set()
+    defeated_attacks = []
+    martyred_noncombatants = []
+    while damage > 0:
         defense = None
         # Generate "attack" string (must be matched to avoid hit)
         attack = generate_string()
@@ -75,22 +54,38 @@ def main():
             # Report battle state.
             print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
                     '''Attack {:>10} Non-c {:>10}'''.
-                    format(s.score, s.level, s.damage, attack, noncombatant), 
-                    end=' ')
+                    format(score, level, damage, attack, noncombatant), end=' ')
             # Collect "defense" (user regex).
             defense = input('load: ')
             # Check defense against past regexes; invalidate if found.
-            if defense in s.defense_record:
+            if defense in defense_record:
                 print('This defense has already been used.')
                 continue
             else:
-                s.defense_record.add(defense)
+                defense_record.add(defense)
                 break
         # Test defense against "attack" and "noncombatant".
         attack_successful, collateral_damage = (
-                assess_defense_single(defense, attack, noncombatant))
-        s.score_defense(attack, attack_successful, collateral_damage)
+                assess_defense(defense, attack, noncombatant))
+        score_defense(attack_successful, collateral_damage)
+        if attack_successful and not collateral_damage:
+            # Defeat attack
+            print('Successful defense without non-combatant casualties.')
+            defeated_attacks.append(attack)
+            score += 1 * level
+            level += .1
+        elif collateral_damage:
+            print('Non-combatant casualties!')
+            # Assess penalty
+            score -= 1 * level
+        if not attack_successful:
+            print('Defense failed!')
+            # Hit increases damage
+            damage -= 1
 
+def score_defense(attack_successful, collateral_damage):
+    # will use class for this
+    pass
 def assess_defense_single(defense, attack, noncombatant):
     """Determine success of defense and collaterals in single-attack event."""
     # Attack; later we need to be able to handle multiple attacks.
