@@ -19,7 +19,18 @@ line discipline
 
 "raw vs. cooked"
 
-stdscr: represents standard screen size
+
+# begin video c. 13:00
+# https://www.youtube.com/watch?feature=player_detailpage&v=eN1eZtjLEnU#t=775
+import curses
+from urllib2 import urlopen
+from HTMLParser import HTMLParser
+from simplejson import loads
+
+def get_new_joke():
+    """Get joke on line and prepare it for printing."""
+    joke_json = loads(urlopen('http://api.icrdb.com/jokes/random').read())
+    return HTMLParses().unescape(joke_json['value']['joke']).encode('utf-8')
 
 # instantiate standard screen object
 stdscr = curses.initscr()
@@ -99,7 +110,75 @@ curses.curs_set(1)
 curses.endwin()
 
 ********
+# at video c. 18:00
+# https://www.youtube.com/watch?feature=player_detailpage&v=eN1eZtjLEnU#t=1083
 
 urwid: replacement for ncurses
 layered widgets, composed: "the decorator pattern in action"
 event loops
+
+import urwid
+from urllib2 import urlopen
+from HTMLParser import HTMLParser
+from simplejson import loads
+
+# set up our color schemes
+palette = [('titlebar', 'black', 'white'),
+        ('refresh button', 'dark green,bold', 'black'),
+        ('quit button', 'dark red,bold', 'black'),
+        ('getting quote', dark blue', 'black'),
+        ]
+
+# create 'RANDOM QUOTES' header
+header_test = urwid.Text(u'RANDOM QUOTES') # text widget
+header = urwid.AttrMap(header_text, 'titlebar') # decorate into attribute map
+
+# create bottom menu; text widget containing iterable; tuples are used to pinpoint formatting of single characters
+menu = urwid.Text(
+        [u'Press (', ('refresh button', u'R'),
+        u') to get a new quote. Press (', ('quit button', u'Q'),
+        u') to quit.'])
+
+# use widgets to create UI more concisely than in curses
+# create text box widget
+quote_text = urwid.Text(u'Prese (R) to get your first quote.')
+# decorate with filler widget with invisible border
+quote_filler = urwid.Filler(quote_text, valign='top', top=1, bottom=1)
+# decorate that into padding widget
+v_padding = urwid.Padding(quote_filler, left=1, right=1)
+# decorate that with visible border
+quote_box = urwid.LineBox(v_padding)
+
+# assemble the widgets into widget-layout frame
+layout = urwid.Frame(header=header, body=quote_box, footer=menu)
+
+def get_new_joke():
+    """Get joke on line and prepare it for printing."""
+    joke_json = loads(urlopen('http://api.icrdb.com/jokes/random').read())
+    return HTMLParses().unescape(joke_json['value']['joke']).encode('utf-8')
+
+# handle key presses; one function to handle all input
+def handle_input(key):
+    if key == 'r' or key == 'R':
+        quote_box.base_widget.set_text(('getting quote', 'Getting new quote'))
+        main_loop.draw_screen()
+        quote_box.base_widget.set_text(get_new_joke())
+    elif key == 'q' or key == 'Q':
+        raise urwid.ExitMainLoop()
+
+# create event loop
+main_loop = urwid.MainLoop(layout, palett, unhandled_input=handle-input)
+
+# run program
+main_loop.run()
+
+*****
+
+# resources
+# https://www.youtube.com/watch?feature=player_detailpage&v=eN1eZtjLEnU#t=1306
+
+Urwid:
+    documentation: excess.org/urwid/docs
+    tutorials: excess.org/urwid/docs/tutorial/index.html#urwid-tutorial
+    manual: excess.org/urwid/docs/manual/index.html#urwid-manual
+
