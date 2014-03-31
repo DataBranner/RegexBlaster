@@ -9,3 +9,4 @@ py==1.4.20
 pytest==2.5.2
 pyzmq==14.1.1
 tornado==3.2
+urwid==1.2.0

@@ -1,0 +1,105 @@
+Notes from Sean Zicari, "Use Curses, Don't Swear," https://www.youtube.com/watch?v=eN1eZtjLEnU (2013)
+
+CLI: command-line interface
+
+midnight commander
+tput
+:colorscheme blue
+export terminal.txt
+
+list all terminals?
+
+escape sequences
+
+ECMA-48
+termcap
+terminfo
+
+line discipline
+
+"raw vs. cooked"
+
+stdscr: represents standard screen size
+
+# instantiate standard screen object
+stdscr = curses.initscr()
+
+# properly initialize screen
+curses.noecho()
+curses.cbreak()
+curses.curs_set(0)
+
+# check for and begin color support
+if curses.has_colors():
+    curses.start_color()
+
+# optionally enable the F-1 etc., which are multi-byte
+strdscr.keypad(1)
+
+# initialize desired color combinations (#, foreground, background)
+curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)
+
+# begin program
+# create UI
+stdscr.addstr('RANDOM QUOTES', curses.A_REVERSE) # content of top line
+stdscr.chgat(-1, curses.A_REVERSE) # "fill out rest of line"
+
+# menu at bottom
+stdscr.addstr(curses.LINES-1, 0, "Press 'R' to request a new quote, 'Q' to quit.")
+
+# color and boldface the R (character 7 from 0, 1 char long) and Q (char 35)
+stdscr.chgat(curses.LINES-1, 7, 1, curses.A_BOLD | curses.color_pair(2))
+stdscr.chgat(curses.LINES-1, 35, 1, curses.A_BOLD | curses.color_pair(1))
+
+# set up window holding the random quotes; use border for visibility; 
+quote_window = curses.newwin(curses.LINES-2, curses.COLS, 1, 0)
+
+# set up sub-window holding text; invisible hence dotted line border
+# things must be refreshed in the correct order
+# sub-window is necessary in order not to overwrite main window content
+quote_text_window = quote_window.subwin(curses.LINES-6, curses.COLS-4, 3, 2)
+quote_text_window.addstr("Press 'R' to get first quote.")
+
+# draw border around main quote window
+quote_window.box()
+
+# update internal window data structures
+stdscr.noutrefresh() # done first, prevent standard screen overwriting others
+quote_window.noutrefresh()
+
+# redraw screen
+curses.doupdate()
+
+# create event loop
+while True:
+    c = quote_window.getch()
+    if c == ord('r') or c == ord('R'):
+        quote_text_window.clear()
+        quote_text_window.addstr('Getting quote...', curses.color_pair(3))
+        quote_text_window.refresh()
+        quote_text_window.clear()
+        quote_text_window.addstr(get_new_joke())
+    elif c == ord('q') or c == ord('Q'):
+        break
+    # refresh windows from bottom up, to avoid flickering
+    stdscr.noutrefresh()
+    quote_window.noutrefresh()
+    quote_text_window.noutrefresh()
+    curses.doupdate()
+
+# if broken out of loop, restore terminal settings
+curses.nocbreak() # end character-break mode
+#stdscr.keypad(0)
+curses.echo()
+curses.curs_set(1)
+
+# destroy window
+curses.endwin()
+
+********
+
+urwid: replacement for ncurses
+layered widgets, composed: "the decorator pattern in action"
+event loops
