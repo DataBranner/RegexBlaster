@@ -43,37 +43,43 @@ def test_generate_string_02():
 
 def test_assess_defense_single_01():
     """Test characters present in empty string."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('.+', B.generate_string(20), '') == (
+        assert s.assess_defense_single('.+', B.generate_string(20), '') == (
                 True, False)
 
 def test_assess_defense_single_02():
     """Test characters present in both strings."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('.+', B.generate_string(20),
+        assert s.assess_defense_single('.+', B.generate_string(20),
                 B.generate_string(20)) == (True, True)
 
 def test_assess_defense_single_03():
     """Test characters present in empty string."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('.+', '', B.generate_string(20)) == (
+        assert s.assess_defense_single('.+', '', B.generate_string(20)) == (
                 False, True)
 
 def test_assess_defense_single_04():
     """Test word with and without letters."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('[a-z ]+', B.generate_string(20, 'a '),
+        assert s.assess_defense_single('[a-z ]+', B.generate_string(20, 'a '),
                 B.generate_string(20, '.')) == (True, False)
 
 def test_assess_defense_single_05():
     """Test word with and without letters."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('(\w| )+', B.generate_string(20, 'a '),
+        assert s.assess_defense_single('(\w| )+', B.generate_string(20, 'a '),
                 B.generate_string(20, '.')) == (True, False)
 
 def test_assess_defense_single_06():
     """Test absence of words in full vs. empty string."""
+    s = B.Scorer()
     for i in range(looprange):
-        assert B.assess_defense_single('\W*', B.generate_string(20), '') == (
+        assert s.assess_defense_single('\W*', B.generate_string(20), '') == (
                 False, True)
 

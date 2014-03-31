@@ -11,27 +11,6 @@ User generates "defense" regex pattern; must match "attack" but not
 "noncombatant".
 """
 
-# For later:
-#  1. Handle near-identical defenses:
-#   a. evaluate by edit-distance vis-à-vis all previous defenses; average
-#      string-length minus edit-distance may be more useful than
-#      edit-distance alone.
-#   b. handle by repeating attack string; repeat defense barred;
-#   c. handle by delaying efficacy, thus increasing risk of hit (San's
-#      suggestion); this requires implementing timing.
-#  2. Generate progressively more complex attack strings. There are presumably
-#     ways to do this formulaically. We should also try to create noncombatant
-#     strings and attack strings in such a way as to be difficult to
-#     distinguish.
-#  3. In future we may want multiple attack and/or noncombatant strings.
-#  4. Invalid defense string may lead to score reduction or other penalties.
-#  5. Evaluate quality of defense for more scores or greater level increase.
-#  6. Figure damage (from hits); it may affect time of defense's effect..
-#  7. For more complex attacks, it may be interesting to repeat them just in
-#     order to see how many different defenses the user can supply. Keep
-#     repeating until user fails — or even a little after that.
-#  8. If \w appears a lot, add whitespace.
-
 import re
 import random
 import string
@@ -44,6 +23,26 @@ class Scorer():
         self.defense_record = set()
         self.defeated_attacks = []
         self.martyred_noncombatants = []
+
+    def assess_defense_single(self, defense, attack, noncombatant):
+        """Determine success, side-effects of defense in single-attack event."""
+        # Attack; later we need to be able to handle multiple attacks.
+        attack_successful = False
+        try:
+            match = re.search(defense, attack).group()
+        except AttributeError:
+            match = None
+        if attack == match:
+            attack_successful = True
+        # Non-targets (penalty for hitting); later need to handle multiple.
+        collateral_damage = False
+        try:
+            match = re.search(defense, noncombatant).group()
+        except AttributeError:
+            match = None
+        if noncombatant == match:
+            collateral_damage = True
+        return attack_successful, collateral_damage
 
     def score_defense(self, attack, attack_successful, collateral_damage):
         """Update score, damage, and level based on defense results."""
@@ -88,28 +87,8 @@ def main():
                 break
         # Test defense against "attack" and "noncombatant".
         attack_successful, collateral_damage = (
-                assess_defense_single(defense, attack, noncombatant))
+                s.assess_defense_single(defense, attack, noncombatant))
         s.score_defense(attack, attack_successful, collateral_damage)
-
-def assess_defense_single(defense, attack, noncombatant):
-    """Determine success of defense and collaterals in single-attack event."""
-    # Attack; later we need to be able to handle multiple attacks.
-    attack_successful = False
-    try:
-        match = re.search(defense, attack).group()
-    except AttributeError:
-        match = None
-    if attack == match:
-        attack_successful = True
-    # Non-targets (penalty for hitting); later need to handle multiple.
-    collateral_damage = False
-    try:
-        match = re.search(defense, noncombatant).group()
-    except AttributeError:
-        match = None
-    if noncombatant == match:
-        collateral_damage = True
-    return attack_successful, collateral_damage
 
 def choose_charset(typestring='aA'):
     charset = ''
