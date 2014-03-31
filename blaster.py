@@ -71,7 +71,7 @@ def main():
         # Generate "noncombatant" string (must be matched to avoid score-loss)
         noncombatant = generate_string()
         # Battle state loop.
-        report_battle_state(s, defense, attack, noncombatant)
+        defense = report_battle_state(s, defense, attack, noncombatant)
         # Test defense against "attack" and "noncombatant".
         attack_successful, collateral_damage = (
                 s.assess_defense_single(defense, attack, noncombatant))
@@ -84,7 +84,7 @@ def report_battle_state(s, defense, attack, noncombatant):
         # Report battle state.
         print('''Score {:>4.1f} Level {:>4.1f} Damage {:>4.1f} '''
                 '''Attack {:>10} Non-c {:>10}'''.format(s.score, s.level, 
-                    s.damage, attack, noncombatant))
+                    s.damage, attack, noncombatant), end='')
         # Collect "defense" (user regex).
         defense = input(' load: ')
         # Check defense against past regexes; invalidate if found.
@@ -93,7 +93,7 @@ def report_battle_state(s, defense, attack, noncombatant):
             continue
         else:
             s.defense_record.add(defense)
-            return
+            return defense
 
 charset_dict = {
         'a': string.ascii_lowercase,
