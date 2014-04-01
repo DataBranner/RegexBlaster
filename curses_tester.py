@@ -1,32 +1,42 @@
-# curses_tester.py
+#! /usr/bin/python
+# curses_tester_01.py
 # David Prager Branner
 # 20140401
 
-"""Explore the use of Ncurses."""
+"""Explore the use of Ncurses. Open window; close on two backticks."""
 
+import sys
+if sys.version_info[0] != 3:
+    print('Python 3 required.')
+    sys.exit()
 import curses
-from urllib2 import urlopen
-from HTMLParser import HTMLParser
-from simplejson import loads
 
-nstantiate standard screen object
+# Instantiate standard screen object.
 stdscr = curses.initscr()
 
-# Properly initialize screen
+# Properly initialize screen.
 curses.noecho()
 curses.cbreak()
 curses.curs_set(0)
 
-# check for and begin color support
+# Check for and begin color support.
 if curses.has_colors():
     curses.start_color()
 
-# optionally enable the F-1 etc. keys, which are multi-byte
-strdscr.keypad(1)
+# Optionally enable the F-1 etc. keys, which are multi-byte.
+stdscr.keypad(1)
 
 ###################
 # Body of program #
 ###################
+
+while True:
+    window = curses.newwin(curses.LINES, curses.COLS)
+    c = window.getch()
+    if c == ord('`'):
+        c = window.getch()
+        if c == ord('`'):
+            break
 
 # Things to do:
 # Different subwindows.
@@ -40,13 +50,13 @@ strdscr.keypad(1)
 ###################
 
 
-# if broken out of loop, restore terminal settings
-curses.nocbreak() # end character-break mode
+# If program core finished, restore terminal settings.
+curses.nocbreak() # end character-break mode.
 stdscr.keypad(0)
 curses.echo()
 curses.curs_set(1)
 
-# destroy window
+# Destroy window.
 curses.endwin()
 
 
