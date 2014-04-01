@@ -3,8 +3,11 @@ Notes from Sean Zicari, "Use Curses, Don't Swear," https://www.youtube.com/watch
 CLI: command-line interface
 
 midnight commander
+
 tput
-:colorscheme blue
+
+vim: :colorscheme blue
+
 export terminal.txt
 
 list all terminals?
