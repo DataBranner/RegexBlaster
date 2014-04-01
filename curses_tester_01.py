@@ -3,7 +3,10 @@
 # David Prager Branner
 # 20140401
 
-"""Explore the use of Ncurses. Open window; close on two backticks."""
+"""Explore the use of Ncurses. 
+
+01 Open window; close on two backticks.
+"""
 
 import sys
 if sys.version_info[0] != 3:
