@@ -5,7 +5,7 @@
 
 """Explore the use of Ncurses.
 
-04 Set up different sub-windows. Separate Timer class.
+04 Set up different sub-windows. Separate Timer class. Defense line.
 03 Get styled text working; no display delay on startup..
 02 Set up and close curses in special functions; always trap ctrl-c.
 01 Open window; close on two backticks.
@@ -24,7 +24,6 @@ class Timer():
     def __init__(self, time_limit=10):
         self.start_time = time.time()
         self.time_limit = time_limit
-        self.defense = ''
         self.update()
 
     def update(self):
@@ -45,6 +44,7 @@ class Window():
         self.set_up_curses()
         self.timer = Timer()
         self.score = None
+        self.defense = ''
 
     def set_up_curses(self):
         # Instantiate standard screen object.
@@ -110,7 +110,13 @@ class Window():
         pass
 
     def display_defense(self):
-        pass
+        defense_line = 'defense: ' + self.defense
+        # Defense line appears in white (color pair 16).
+        self.stdscr.addstr(
+                curses.LINES-1, 0, defense_line, curses.color_pair(16))
+        # Anything deleted is overwritten with blackness (color pair 1).
+        self.stdscr.chgat(curses.LINES-1, len(defense_line), -1,
+                curses.color_pair(1))
 
 def main():
     w = Window()
@@ -131,25 +137,31 @@ def main():
 
 def main_loop(w):
     while True:
-        # Different subwindows: score_bar, main_win, defense_bar.
+        # Different subwindows: scores, main window, messages, defense-strings..
         # Add code only to update every second or on change.
         curses.delay_output(100)
         w.display_score()
         w.display_message()
         w.display_defense()
         # Get next character in regex string.
-        c = w.window.getch()
-        w.defense += c
+        try:
+            c = w.window.getch()
+            if c == 127:
+                w.defense = w.defense[:-1]
+#            w.defense += str(c)
+            else:
+                w.defense += chr(c)
+        except ValueError:
+            pass
         # Append to regex string and try against attack and non-combatant
         # strings. Must display what we have in special window, so user seems
         # to be typing into window.
         pass
 
 # Things to do:
-# Find current window dimensions using window.getmaxyx()
-# Set background color.
-# Item gradually fading into view.
-# Input box.
+# Find current window dimensions using window.getmaxyx(). Revisit this.
+# Set background color: automatically black for now.
+# Item gradually fading into or out of view. Useful for hits.
 
 #######################
 # End of program body #
