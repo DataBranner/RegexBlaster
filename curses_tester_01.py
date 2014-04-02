@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_01.py
 # David Prager Branner
-# 20140401
+# 20140401, works
 
 """Explore the use of Ncurses. 
 

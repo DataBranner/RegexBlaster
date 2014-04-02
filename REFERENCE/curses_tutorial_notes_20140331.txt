@@ -38,10 +38,10 @@ def get_new_joke():
     joke_json = loads(urlopen('http://api.icrdb.com/jokes/random').read())
     return HTMLParses().unescape(joke_json['value']['joke']).encode('utf-8')
 
-# instantiate standard screen object
+# Instantiate standard screen object
 stdscr = curses.initscr()
 
-# properly initialize screen
+# Properly initialize screen
 curses.noecho()
 curses.cbreak()
 curses.curs_set(0)
@@ -50,7 +50,7 @@ curses.curs_set(0)
 if curses.has_colors():
     curses.start_color()
 
-# optionally enable the F-1 etc., which are multi-byte
+# optionally enable the F-1 etc. keys, which are multi-byte
 strdscr.keypad(1)
 
 # initialize desired color combinations (#, foreground, background)
