@@ -47,12 +47,13 @@ def main_loop(stdscr, window):
             t = t[5:]
         elif t[0:2] == '0:':
             t = t[2:]
-        elif t[0] == '0':
+        if t[0] == '0':
             t = t[1:]
         score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                 '''Time remaining: {}'''.
                         format(random.randint(1, 100), random.randint(1, 100),
                         random.randint(1, 100), t))
+        # Add code only to update every second or on change.
         display_score(stdscr, window, score)
         # Get next character in regex string.
         c = window.getch()
