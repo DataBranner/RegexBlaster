@@ -43,6 +43,12 @@ def main_loop(stdscr, window):
     while True:
         # Different subwindows: score_bar, main_win, defense_bar.
         t = str(datetime.timedelta(seconds=round(time.time()-start_time)))
+        if t[0:5] == '0:00:':
+            t = t[5:]
+        elif t[0:2] == '0:':
+            t = t[2:]
+        if t[0] == '0':
+            t = t[1:]
         score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                 '''Time remaining: {}'''.
                         format(random.randint(1, 100), random.randint(1, 100),
