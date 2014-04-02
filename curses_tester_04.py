@@ -20,12 +20,32 @@ import random
 import time
 import datetime
 
+class Timer():
+    def __init__(self, time_limit=10):
+        self.start_time = time.time()
+        self.time_limit = time_limit
+        self.update()
+
+    def update(self):
+        self.time_passed = time.time() - self.start_time
+        self.time_left = self.time_limit - self.time_passed
+        self.time_left_str = str(
+                datetime.timedelta(seconds=round(self.time_left))) 
+        if self.time_left_str[0:5] == '0:00:':
+            self.time_left_str = self.time_left_str[5:]
+        elif self.time_left_str[0:2] == '0:':
+            self.time_left_str = self.time_left_str[2:]
+        if self.time_left_str[0] == '0':
+            self.time_left_str = self.time_left_str[1:]
+
+
 class Window():
     def __init__(self):
         self.set_up_curses()
+        self.timer = Timer()
+        self.score = None
 
     def set_up_curses(self):
-        self.score = None
         # Instantiate standard screen object.
         self.stdscr = curses.initscr()
         # Properly initialize screen.
@@ -53,16 +73,20 @@ class Window():
         self.window.nodelay(0)
 
     def display_score(self):
-        self.stdscr.addstr(0, 0, self.score)#, curses.A_REVERSE)
-        self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
-        self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
-        self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
-        self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
-        self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
-        self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
-        self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) # Time remaining
-        self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
-        self.refresh()
+        if self.timer.time_left < 0:
+            self.end_game()
+        else:
+            self.timer.update()
+            self.stdscr.addstr(0, 0, self.score)#, curses.A_REVERSE)
+            self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
+            self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
+            self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
+            self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
+            self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
+            self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
+            self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) # Time remaining
+            self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
+            self.refresh()
 
 def main():
     w = Window()
@@ -82,25 +106,12 @@ def main():
 ###################
 
 def main_loop(w):
-    start_time = time.time()
-    time_limit = 10
     while True:
         # Different subwindows: score_bar, main_win, defense_bar.
-        time_passed = time.time() - start_time
-        time_left = time_limit - time_passed
-        if time_left < 0:
-            w.end_game()
-        time_left = str(datetime.timedelta(seconds=round(time_left)))
-        if time_left[0:5] == '0:00:':
-            time_left = time_left[5:]
-        elif time_left[0:2] == '0:':
-            time_left = time_left[2:]
-        if time_left[0] == '0':
-            time_left = time_left[1:]
         w.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                 '''Time remaining: {:<8}'''.
                         format(random.randint(1, 100), random.randint(1, 100),
-                        random.randint(1, 100), time_left))
+                        random.randint(1, 100), w.timer.time_left_str))
         # Add code only to update every second or on change.
         curses.delay_output(100)
         w.display_score()
