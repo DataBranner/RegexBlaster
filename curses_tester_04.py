@@ -24,6 +24,7 @@ class Timer():
     def __init__(self, time_limit=10):
         self.start_time = time.time()
         self.time_limit = time_limit
+        self.defense = ''
         self.update()
 
     def update(self):
@@ -61,12 +62,24 @@ class Window():
         curses.use_default_colors()
         for i in range(0, curses.COLORS):
             curses.init_pair(i + 1, i, -1)
+        # Create and configure window.
         self.window = curses.newwin(curses.LINES, curses.COLS)
+        self.window.chgat(curses.color_pair(198))
         self.window.nodelay(1)
+        # Create and configure main half-screen subwindows.
+        half_screen = curses.COLS//2
+        self.attacks = curses.newwin(curses.LINES-3, half_screen, 1, 0)
+        self.attacks.box()
+        self.noncomb = curses.newwin(
+                curses.LINES-3, half_screen, 1, half_screen)
+        self.noncomb.chgat(-1, curses.color_pair(198))
+        self.noncomb.box()
 
     def refresh(self):
         self.stdscr.noutrefresh()
         self.window.noutrefresh()
+        self.attacks.noutrefresh()
+        self.noncomb.noutrefresh()
         curses.doupdate()
 
     def end_game(self):
@@ -82,16 +95,22 @@ class Window():
                                 random.randint(1, 100), random.randint(1, 100),
                                 self.timer.time_left_str))
             self.timer.update()
-            self.stdscr.addstr(0, 0, self.score)#, curses.A_REVERSE)
+            self.stdscr.addstr(0, 0, self.score)
             self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
             self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
             self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
             self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
             self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
             self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
-            self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) # Time remaining
+            self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) #Time remaining
             self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
             self.refresh()
+
+    def display_message(self):
+        pass
+
+    def display_defense(self):
+        pass
 
 def main():
     w = Window()
@@ -116,8 +135,11 @@ def main_loop(w):
         # Add code only to update every second or on change.
         curses.delay_output(100)
         w.display_score()
+        w.display_message()
+        w.display_defense()
         # Get next character in regex string.
         c = w.window.getch()
+        w.defense += c
         # Append to regex string and try against attack and non-combatant
         # strings. Must display what we have in special window, so user seems
         # to be typing into window.
