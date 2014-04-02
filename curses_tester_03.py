@@ -47,7 +47,7 @@ def main_loop(stdscr, window):
             t = t[5:]
         elif t[0:2] == '0:':
             t = t[2:]
-        if t[0] == '0':
+        elif t[0] == '0':
             t = t[1:]
         score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                 '''Time remaining: {}'''.
