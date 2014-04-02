@@ -1,7 +1,7 @@
 #! /usr/bin/python
-# curses_tester_03.py
+# curses_tester_04.py
 # David Prager Branner
-# 20140402
+# 20140402, works
 
 """Explore the use of Ncurses.
 
@@ -139,7 +139,7 @@ def main_loop(w):
     while True:
         # Different subwindows: scores, main window, messages, defense-strings..
         # Add code only to update every second or on change.
-        curses.delay_output(100)
+        curses.delay_output(25)
         w.display_score()
         w.display_message()
         w.display_defense()
@@ -148,7 +148,7 @@ def main_loop(w):
             c = w.window.getch()
             if c == 127:
                 w.defense = w.defense[:-1]
-#            w.defense += str(c)
+            # For checking other delete characters, use w.defense += str(c)
             else:
                 w.defense += chr(c)
         except ValueError:
