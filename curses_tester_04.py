@@ -20,14 +20,58 @@ import random
 import time
 import datetime
 
+class Window():
+    def __init__(self):
+        self.set_up_curses()
+
+    def set_up_curses(self):
+        self.score = None
+        # Instantiate standard screen object.
+        self.stdscr = curses.initscr()
+        # Properly initialize screen.
+        curses.noecho()
+        curses.cbreak()
+        curses.curs_set(0)
+        # Check for and begin color support.
+        if curses.has_colors():
+            curses.start_color()
+        # Optionally enable the F-1 etc. keys, which are multi-byte.
+        self.stdscr.keypad(1)
+        # Declare colors.
+        curses.use_default_colors()
+        for i in range(0, curses.COLORS):
+            curses.init_pair(i + 1, i, -1)
+        self.window = curses.newwin(curses.LINES, curses.COLS)
+        self.window.nodelay(1)
+
+    def refresh(self):
+        self.stdscr.noutrefresh()
+        self.window.noutrefresh()
+        curses.doupdate()
+
+    def end_game(self):
+        self.window.nodelay(0)
+
+    def display_score(self):
+        self.stdscr.addstr(0, 0, self.score)#, curses.A_REVERSE)
+        self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
+        self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
+        self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
+        self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
+        self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
+        self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
+        self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) # Time remaining
+        self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
+        self.refresh()
+
 def main():
-    stdscr, window = set_up_curses()
+    w = Window()
     try:
-        main_loop(stdscr, window)
+        main_loop(w)
     except KeyboardInterrupt:
         # If program core finished, restore terminal settings.
         curses.nocbreak() # end character-break mode.
-        stdscr.keypad(0)
+        w.stdscr.keypad(0)
         curses.echo()
         curses.curs_set(1)
         # Destroy window.
@@ -37,13 +81,15 @@ def main():
 # Body of program #
 ###################
 
-def main_loop(stdscr, window):
+def main_loop(w):
     start_time = time.time()
-    time_limit = 90
+    time_limit = 10
     while True:
         # Different subwindows: score_bar, main_win, defense_bar.
         time_passed = time.time() - start_time
         time_left = time_limit - time_passed
+        if time_left < 0:
+            w.end_game()
         time_left = str(datetime.timedelta(seconds=round(time_left)))
         if time_left[0:5] == '0:00:':
             time_left = time_left[5:]
@@ -51,15 +97,16 @@ def main_loop(stdscr, window):
             time_left = time_left[2:]
         if time_left[0] == '0':
             time_left = time_left[1:]
-        score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
-                '''Time remaining: {}'''.
+        w.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
+                '''Time remaining: {:<8}'''.
                         format(random.randint(1, 100), random.randint(1, 100),
                         random.randint(1, 100), time_left))
         # Add code only to update every second or on change.
-        display_score(stdscr, window, score)
+        curses.delay_output(100)
+        w.display_score()
         # Get next character in regex string.
-        c = window.getch()
-        # Append to regex string and try against attack and non-combattant
+        c = w.window.getch()
+        # Append to regex string and try against attack and non-combatant
         # strings.
         pass
 
@@ -69,23 +116,6 @@ def main_loop(stdscr, window):
 # Item gradually fading into view.
 # Input box.
 
-def display_score(stdscr, window, score):
-    stdscr.addstr(0, 0, score)#, curses.A_REVERSE)
-    stdscr.chgat(0, 0, 7, curses.color_pair(142))
-    stdscr.chgat(0, 12, 7, curses.color_pair(142))
-    stdscr.chgat(0, 24, 9, curses.color_pair(142))
-    stdscr.chgat(0, 36, 17, curses.color_pair(142))
-    stdscr.chgat(0, 7, 4, curses.color_pair(198))
-    stdscr.chgat(0, 20, 4, curses.color_pair(198))
-    stdscr.chgat(0, 34, 3, curses.color_pair(198))
-    stdscr.chgat(0, 53, 10, curses.color_pair(198))
-    refresh(stdscr, window)
-
-def refresh(stdscr, window):
-    stdscr.noutrefresh()
-    window.noutrefresh()
-    curses.doupdate()
-
 #######################
 # End of program body #
 #######################
@@ -94,25 +124,6 @@ def refresh(stdscr, window):
 # Curses housekeeping #
 #######################
 
-def set_up_curses():
-    # Instantiate standard screen object.
-    stdscr = curses.initscr()
-    # Properly initialize screen.
-    curses.noecho()
-    curses.cbreak()
-    curses.curs_set(0)
-    # Check for and begin color support.
-    if curses.has_colors():
-        curses.start_color()
-    # Optionally enable the F-1 etc. keys, which are multi-byte.
-    stdscr.keypad(1)
-    # Declare colors.
-    curses.use_default_colors()
-    for i in range(0, curses.COLORS):
-        curses.init_pair(i + 1, i, -1)
-    window = curses.newwin(curses.LINES, curses.COLS)
-    window.nodelay(1)
-    return stdscr, window
 
 def ctrl_c_loop():
     while True:
