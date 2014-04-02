@@ -5,7 +5,7 @@
 
 """Explore the use of Ncurses.
 
-04 Set up different sub-windows.
+04 Set up different sub-windows. Separate Timer class.
 03 Get styled text working; no display delay on startup..
 02 Set up and close curses in special functions; always trap ctrl-c.
 01 Open window; close on two backticks.
@@ -76,6 +76,11 @@ class Window():
         if self.timer.time_left < 0:
             self.end_game()
         else:
+            self.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
+                    '''Time remaining: {:<8}'''.
+                            format(random.randint(1, 100),
+                                random.randint(1, 100), random.randint(1, 100),
+                                self.timer.time_left_str))
             self.timer.update()
             self.stdscr.addstr(0, 0, self.score)#, curses.A_REVERSE)
             self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
@@ -108,17 +113,14 @@ def main():
 def main_loop(w):
     while True:
         # Different subwindows: score_bar, main_win, defense_bar.
-        w.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
-                '''Time remaining: {:<8}'''.
-                        format(random.randint(1, 100), random.randint(1, 100),
-                        random.randint(1, 100), w.timer.time_left_str))
         # Add code only to update every second or on change.
         curses.delay_output(100)
         w.display_score()
         # Get next character in regex string.
         c = w.window.getch()
         # Append to regex string and try against attack and non-combatant
-        # strings.
+        # strings. Must display what we have in special window, so user seems
+        # to be typing into window.
         pass
 
 # Things to do:
