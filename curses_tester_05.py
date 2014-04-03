@@ -57,7 +57,7 @@ class Scorer():
         attack_successful = False
         try:
             match = re.search(defense, attack).group()
-        except AttributeError:
+        except AttributeError or TypeError:
             match = None
         if attack == match:
             attack_successful = True
@@ -65,7 +65,7 @@ class Scorer():
         collateral_damage = False
         try:
             match = re.search(defense, noncombatant).group()
-        except AttributeError:
+        except AttributeError or TypeError:
             match = None
         if noncombatant == match:
             collateral_damage = True
@@ -95,6 +95,7 @@ class Window():
         self.T = Timer()
         self.S = Scorer()
         self.defense = ''
+        self.message = ''
 
     def set_up_curses(self):
         # Instantiate standard screen object.
@@ -141,7 +142,7 @@ class Window():
         else:
             self.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                     '''Time remaining: {:<8}'''.
-                            format(random.randint(1, 100),
+                            format(self.S.score,
                                 random.randint(1, 100), random.randint(1, 100),
                                 self.T.time_left_str))
             self.T.update()
@@ -157,7 +158,11 @@ class Window():
             self.refresh()
 
     def display_message(self):
-        pass
+        self.stdscr.addstr(
+                curses.LINES-2, 0, self.message, curses.color_pair(197))
+        # Anything deleted is overwritten with blackness (color pair 1).
+        self.stdscr.chgat(curses.LINES-2, len(self.message), -1,
+                curses.color_pair(1))
 
     def display_defense(self):
         defense_line = 'defense: ' + self.defense
@@ -186,27 +191,17 @@ def main():
 ###################
 
 def main_loop(w):
-    while True:
+    while w.S.damage > 0:
         # Different subwindows: scores, main window, messages, defense-strings..
         # Add code only to update every second or on change.
         curses.delay_output(25)
         w.display_score()
         w.display_message()
         w.display_defense()
-        # Get next character in regex string.
-        try:
-            c = w.window.getch()
-            if c == 127:
-                w.defense = w.defense[:-1]
-            # For checking other delete characters, use w.defense += str(c)
-            else:
-                w.defense += chr(c)
-        except ValueError:
-            pass
-        # Append to regex string and try against attack and non-combatant
-        # strings. Must display what we have in special window, so user seems
-        # to be typing into window.
-        pass
+        attack_defend_cycle(w)
+    if w.S.damage <= 0:
+        w.message = 'Your player has been destroyed in battle. Game over.'
+
 
 # Things to do:
 # Find current window dimensions using window.getmaxyx(). Revisit this.
@@ -217,10 +212,58 @@ def main_loop(w):
 # End of program body #
 #######################
 
-#######################
-# Curses housekeeping #
-#######################
+def attack_defend_cycle(w):
+    w.defense = ''
+    # Generate "attack" string (must be matched to avoid hit)
+    attack = generate_string()
+    # Generate "noncombatant" string (must be matched to avoid score-loss)
+    noncombatant = generate_string()
+    # Battle state loop.
+    # Get next character in regex string.
+    try:
+        c = w.window.getch()
+        if c == 127:
+            w.defense = w.defense[:-1]
+        # For checking other delete characters, use w.defense += str(c)
+        else:
+            w.defense += chr(c)
+    except ValueError:
+        pass
+    # Append to regex string and try against attack and non-combatant strings.
+#    w.defense = report_battle_state(w.S, w.defense, attack, noncombatant)
+    if w.defense:
+        attack_successful, collateral_damage = (
+                w.S.assess_defense_single(w.defense, attack, noncombatant))
+        # Check defense against past regexes; invalidate if found.
+        if w.defense in w.S.defense_record:
+            w.message = 'This defense has already been used; invalid.'
+        else:
+            w.S.defense_record.add(w.defense)
 
+charset_dict = {
+        'a': string.ascii_lowercase,
+        'A': string.ascii_uppercase,
+        '0': string.digits,
+        '.': string.punctuation,
+        }
+ 
+def choose_charset(typestring='aA'):
+    charset = ''
+    for item in typestring:
+        if item == ' ':
+            continue
+        charset += charset_dict[item]
+    # Spaces must follow all others since their numbers are proportional.
+    if ' ' in typestring:
+        charset += ' ' * (len(charset) // 2)
+    return charset
+ 
+def generate_string(length=5, typestring='aA', varying=False):
+    if varying:
+        # Must call a more complicated function, not yet written
+        pass
+    charset = choose_charset(typestring)
+    return ''.join([random.choice(charset) for i in range(length)])             
 
 def ctrl_c_loop():
     while True:
