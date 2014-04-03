@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_05.py
 # David Prager Branner
-# 20140402
+# 20140403
 
 """Explore the use of Ncurses.
 
@@ -20,6 +20,8 @@ import curses
 import random
 import time
 import datetime
+import re
+import string
 
 class Timer():
     def __init__(self, time_limit=10):
@@ -31,7 +33,7 @@ class Timer():
         self.time_passed = time.time() - self.start_time
         self.time_left = self.time_limit - self.time_passed
         self.time_left_str = str(
-                datetime.timedelta(seconds=round(self.time_left))) 
+                datetime.timedelta(seconds=round(self.time_left)))
         if self.time_left_str[0:5] == '0:00:':
             self.time_left_str = self.time_left_str[5:]
         elif self.time_left_str[0:2] == '0:':
@@ -40,11 +42,58 @@ class Timer():
             self.time_left_str = self.time_left_str[1:]
 
 
+class Scorer():
+    def __init__(self):
+        self.score = 0
+        self.level = 1
+        self.damage = 10
+        self.defense_record = set()
+        self.defeated_attacks = []
+        self.martyred_noncombatants = []
+
+    def assess_defense_single(self, defense, attack, noncombatant):
+        """Determine success, side-effects of defense in single-attack event."""
+        # Attack; later we need to be able to handle multiple attacks.
+        attack_successful = False
+        try:
+            match = re.search(defense, attack).group()
+        except AttributeError:
+            match = None
+        if attack == match:
+            attack_successful = True
+        # Non-targets (penalty for hitting); later need to handle multiple.
+        collateral_damage = False
+        try:
+            match = re.search(defense, noncombatant).group()
+        except AttributeError:
+            match = None
+        if noncombatant == match:
+            collateral_damage = True
+        return attack_successful, collateral_damage
+
+    def score_defense(self, attack, attack_successful, collateral_damage):
+        """Update score, damage, and level based on defense results."""
+        if attack_successful and not collateral_damage:
+            # Defeat attack
+            print('Successful defense without non-combatant casualties.')
+            self.defeated_attacks.append(attack)
+            self.score += 1 * self.level
+            self.level += .1
+        elif collateral_damage:
+            print('Non-combatant casualties!')
+            # Assess penalty
+            self.score -= 1 * self.level
+        if not attack_successful:
+            print('Defense failed!')
+            # Hit increases damage
+            self.damage -= 1
+
+
 class Window():
     def __init__(self):
         self.set_up_curses()
-        self.timer = Timer()
-        self.score = None
+        self.T = Timer()
+        self.S = Scorer()
         self.defense = ''
 
     def set_up_curses(self):
@@ -87,15 +136,15 @@ class Window():
         self.window.nodelay(0)
 
     def display_score(self):
-        if self.timer.time_left < 0:
+        if self.T.time_left < 0:
             self.end_game()
         else:
             self.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
                     '''Time remaining: {:<8}'''.
                             format(random.randint(1, 100),
                                 random.randint(1, 100), random.randint(1, 100),
-                                self.timer.time_left_str))
-            self.timer.update()
+                                self.T.time_left_str))
+            self.T.update()
             self.stdscr.addstr(0, 0, self.score)
             self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
             self.stdscr.chgat(0, 7, -1, curses.color_pair(198))

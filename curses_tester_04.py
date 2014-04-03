@@ -6,7 +6,7 @@
 """Explore the use of Ncurses.
 
 04 Set up different sub-windows. Separate Timer class. Defense line.
-03 Get styled text working; no display delay on startup..
+03 Get styled text working; no display delay on startup.
 02 Set up and close curses in special functions; always trap ctrl-c.
 01 Open window; close on two backticks.
 """
