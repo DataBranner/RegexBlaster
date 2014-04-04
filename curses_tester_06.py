@@ -6,7 +6,7 @@
 """Explore the use of Ncurses.
 
 next Apply regex to attack string.
-06 Control window size.
+06 Control window size. Move message to rjust().
 05 Color and label different sub-windows. Trap delete and CR control chars.
 04 Set up different sub-windows. Separate Timer class. Defense line.
 03 Get styled text working; no display delay on startup..
@@ -168,10 +168,11 @@ class Window():
 
     def display_message(self):
         self.stdscr.addstr(
-                curses.LINES-2, 0, self.message, curses.color_pair(197))
+                curses.LINES-2, 0, self.message.rjust(80, ' '), 
+                curses.color_pair(142))
         # Anything deleted is overwritten with blackness (color pair 1).
-        self.stdscr.chgat(curses.LINES-2, len(self.message), -1,
-                curses.color_pair(1))
+#        self.stdscr.chgat(curses.LINES-2, len(self.message), -1,
+#                curses.color_pair(1))
 
     def display_defense(self):
         defense_line = 'defense: ' + self.defense
@@ -213,9 +214,8 @@ def main_loop(w):
 
 
 # Things to do:
-# Find current window dimensions using window.getmaxyx(). Revisit this.
-# Set background color: automatically black for now.
 # Item gradually fading into or out of view. Useful for hits.
+# Set background color: automatically black for now.
 
 #######################
 # End of program body #
@@ -287,24 +287,6 @@ def generate_string(length=5, typestring='aA', varying=False):
         pass
     charset = choose_charset(typestring)
     return ''.join([random.choice(charset) for i in range(length)])             
-
-def ctrl_c_loop():
-    while True:
-        try:
-            if main_loop():
-                break
-        except KeyboardInterrupt:
-            continue
-
-def close_curses(stdscr):
-    # If program core finished, restore terminal settings.
-    curses.nocbreak() # end character-break mode.
-    stdscr.keypad(0)
-    curses.echo()
-    curses.curs_set(1)
-
-    # Destroy window.
-    curses.endwin()
 
 if __name__ == '__main__':
     main()
