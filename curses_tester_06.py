@@ -6,6 +6,7 @@
 """Explore the use of Ncurses.
 
 next Apply regex to attack string.
+06 Control window size.
 05 Color and label different sub-windows. Trap delete and CR control chars.
 04 Set up different sub-windows. Separate Timer class. Defense line.
 03 Get styled text working; no display delay on startup..
@@ -25,7 +26,7 @@ import re
 import string
 
 class Timer():
-    def __init__(self, time_limit=10):
+    def __init__(self, time_limit=30):
         self.start_time = time.time()
         self.time_limit = time_limit
         self.update()
