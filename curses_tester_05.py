@@ -1,11 +1,12 @@
 #! /usr/bin/python
 # curses_tester_05.py
 # David Prager Branner
-# 20140404
+# 20140404, works
 
 """Explore the use of Ncurses.
 
-05 Apply regex to attack string.
+next Apply regex to attack string.
+05 Color and label different sub-windows. Trap delete and CR control chars.
 04 Set up different sub-windows. Separate Timer class. Defense line.
 03 Get styled text working; no display delay on startup..
 02 Set up and close curses in special functions; always trap ctrl-c.
@@ -116,15 +117,18 @@ class Window():
             curses.init_pair(i + 1, i, -1)
         # Create and configure window.
         self.window = curses.newwin(curses.LINES, curses.COLS)
-        self.window.chgat(curses.color_pair(198))
+#        self.window.chgat(curses.color_pair(198))
         self.window.nodelay(1)
         # Create and configure main half-screen subwindows.
         half_screen = curses.COLS//2
         self.attacks = curses.newwin(curses.LINES-3, half_screen, 1, 0)
+        self.attacks.attrset(curses.color_pair(198))
+        self.attacks.addstr(1, 0, 'ATTACK STRINGS'.center(half_screen, ' '))
         self.attacks.box()
         self.noncomb = curses.newwin(
                 curses.LINES-3, half_screen, 1, half_screen)
-        self.noncomb.chgat(-1, curses.color_pair(198))
+        self.noncomb.attrset(curses.color_pair(47))
+        self.noncomb.addstr(1, 0, 'NON-COMBATANT STRINGS (DO NOT KILL)'.center(half_screen, ' '))
         self.noncomb.box()
 
     def refresh(self):
@@ -148,14 +152,15 @@ class Window():
                                 self.T.time_left_str))
             self.T.update()
             self.stdscr.addstr(0, 0, self.score)
-            self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
-            self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
-            self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
-            self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
-            self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
-            self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
-            self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) #Time remaining
-            self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
+            self.stdscr.attrset(curses.color_pair(16))
+#            self.stdscr.chgat(0, 0, -1, curses.color_pair(142)) # Score
+#            self.stdscr.chgat(0, 7, -1, curses.color_pair(198))
+#            self.stdscr.chgat(0, 12, -1, curses.color_pair(142)) # Level
+#            self.stdscr.chgat(0, 20, -1, curses.color_pair(198))
+#            self.stdscr.chgat(0, 24, -1, curses.color_pair(142)) # Damage
+#            self.stdscr.chgat(0, 34, -1, curses.color_pair(198))
+#            self.stdscr.chgat(0, 38, -1, curses.color_pair(142)) #Time remaining
+#            self.stdscr.chgat(0, 53, -1, curses.color_pair(198))
             self.refresh()
 
     def display_message(self):
