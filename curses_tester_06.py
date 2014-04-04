@@ -116,8 +116,8 @@ class Window():
         for i in range(0, curses.COLORS):
             curses.init_pair(i + 1, i, -1)
         # Create and configure window.
+        curses.resizeterm(30, 80)
         self.window = curses.newwin(curses.LINES, curses.COLS)
-#        self.window.chgat(curses.color_pair(198))
         self.window.nodelay(1)
         # Create and configure main half-screen subwindows.
         half_screen = curses.COLS//2
