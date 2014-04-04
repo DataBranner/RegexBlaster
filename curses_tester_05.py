@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_05.py
 # David Prager Branner
-# 20140403
+# 20140404
 
 """Explore the use of Ncurses.
 
@@ -95,6 +95,7 @@ class Window():
         self.T = Timer()
         self.S = Scorer()
         self.defense = ''
+        self.defense_submitted = ''
         self.message = ''
 
     def set_up_curses(self):
@@ -192,7 +193,7 @@ def main():
 
 def main_loop(w):
     while w.S.damage > 0:
-        # Different subwindows: scores, main window, messages, defense-strings..
+        # Different subwindows: scores, main window, messages, defense-strings.
         # Add code only to update every second or on change.
         curses.delay_output(25)
         w.display_score()
@@ -213,7 +214,6 @@ def main_loop(w):
 #######################
 
 def attack_defend_cycle(w):
-    w.defense = ''
     # Generate "attack" string (must be matched to avoid hit)
     attack = generate_string()
     # Generate "noncombatant" string (must be matched to avoid score-loss)
@@ -222,23 +222,38 @@ def attack_defend_cycle(w):
     # Get next character in regex string.
     try:
         c = w.window.getch()
-        if c == 127:
+        # Delete last character: DEL, BS.
+        if c in {127, 18}:
             w.defense = w.defense[:-1]
+        # Submit finished string: CR, LF, VT, FF, ESC.
+        elif c in {10, 13, 11, 12, 27}:
+            # Clear message and submit handle completed defense string.
+            w.message = ''
+            w.defense_submitted = w.defense # qqq add defense_submitted to W
+        # Other control characters. QQQ we have not dealt with arrow keys.
+        elif c == -1 or not (32 <= c <= 126):
+            pass
         # For checking other delete characters, use w.defense += str(c)
         else:
+#            w.defense += str(c)
             w.defense += chr(c)
     except ValueError:
         pass
     # Append to regex string and try against attack and non-combatant strings.
-#    w.defense = report_battle_state(w.S, w.defense, attack, noncombatant)
-    if w.defense:
+    # Two components: 
+    #    Finished defense string is passed to assess_defense_single; 
+    #    Unfinished defense string is, if possible, evaluated tentatively 
+    #        against attack and noncombatant strings.
+    if w.defense_submitted:
         attack_successful, collateral_damage = (
-                w.S.assess_defense_single(w.defense, attack, noncombatant))
+                w.S.assess_defense_single(
+                    w.defense_submitted, attack, noncombatant))
         # Check defense against past regexes; invalidate if found.
-        if w.defense in w.S.defense_record:
+        if w.defense_submitted in w.S.defense_record:
             w.message = 'This defense has already been used; invalid.'
         else:
-            w.S.defense_record.add(w.defense)
+            w.S.defense_record.add(w.defense_submitted)
+            w.defense_submitted = ''
 
 charset_dict = {
         'a': string.ascii_lowercase,
