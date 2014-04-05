@@ -43,14 +43,16 @@ Replacement is not yet dealt with but should also figure.
 
  1. Report results in file or to screen on close.
 
+ 1. Scoring: parse defense string and return value.
+
  1. Help page on start-up. 
  
  1. User corrects regex offered by machine.
 
  1. Handle near-identical defenses:
 
-  2. evaluate by edit-distance vis-à-vis all previous defenses; average  string-length minus edit-distance may be more useful than edit-distance alone.
-  2. handle by repeating attack string; repeat defense barred;
+  2. evaluate by edit-distance vis-à-vis all previous defenses; average string-length minus edit-distance may be more useful than edit-distance alone.
+  2. **DONE**: handle by repeating attack string; repeat defense barred;
   2. handle by delaying efficacy, thus increasing risk of hit (San's  suggestion); this requires implementing timing.
 
  1. Generate progressively more complex attack strings. There are presumably ways to do this formulaically. We should also try to create noncombatant strings and attack strings in such a way as to be difficult to distinguish.
