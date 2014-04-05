@@ -2,11 +2,13 @@
 
 An arcade game to practice regular expressions.
 
+Currently runs at the command line in both Python 2.6 or 2.7 and Py3.
+
+All output is via command-line interface.
+
 ---
 
 ### To do
-
- 1. Move `defense` and `message` strings to `Scorer`.
 
  1. Printed messages move to `message`.
 
@@ -50,9 +52,11 @@ An arcade game to practice regular expressions.
 
  1. If \w appears a lot, add whitespace.
 
+ 1. JS version.
+
 ### Versions
 
- * 06 Control window size. Move message to `rjust()`.
+ * 06 Control window size. Move message to `rjust()`. Move `defense` and `message` strings to `Scorer`.
 
  * 05 Color and label different sub-windows. Trap delete and CR control chars.
 
