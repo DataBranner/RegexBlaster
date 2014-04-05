@@ -44,6 +44,9 @@ class Scorer():
         self.defense_record = set()
         self.defeated_attacks = []
         self.martyred_noncombatants = []
+        self.defense = ''
+        self.defense_submitted = ''
+        self.message = ''
 
     def assess_defense_single(self, defense, attack, noncombatant):
         """Determine success, side-effects of defense in single-attack event."""
@@ -91,9 +94,6 @@ class Window():
         self.set_up_curses()
         self.T = Timer()
         self.S = Scorer()
-        self.defense = ''
-        self.defense_submitted = ''
-        self.message = ''
 
     def set_up_curses(self):
         # Instantiate standard screen object.
@@ -163,16 +163,16 @@ class Window():
 
     def display_message(self):
         self.stdscr.addstr(
-                curses.LINES-2, 0, self.message.rjust(80, ' '), 
+                curses.LINES-2, 0, self.S.message.rjust(80, ' '), 
                 curses.color_pair(142))
-        # The following was commented out when self.message was replaced with
-        # self.message.rjust.
+        # The following was commented out when self.S.message was replaced with
+        # self.S.message.rjust.
 #        # Anything deleted is overwritten with blackness (color pair 1).
-#        self.stdscr.chgat(curses.LINES-2, len(self.message), -1,
+#        self.stdscr.chgat(curses.LINES-2, len(self.S.message), -1,
 #                curses.color_pair(1))
 
     def display_defense(self):
-        defense_line = 'defense: ' + self.defense
+        defense_line = 'defense: ' + self.S.defense
         # Defense line appears in white (color pair 16).
         self.stdscr.addstr(
                 curses.LINES-1, 0, defense_line, curses.color_pair(16))
@@ -207,7 +207,7 @@ def main_loop(w):
         w.display_defense()
         attack_defend_cycle(w)
     if w.S.damage <= 0:
-        w.message = 'Your player has been destroyed in battle. Game over.'
+        w.S.message = 'Your player has been destroyed in battle. Game over.'
 
 #######################
 # End of program body #
@@ -224,19 +224,19 @@ def attack_defend_cycle(w):
         c = w.window.getch()
         # Delete last character: DEL, BS.
         if c in {127, 18}:
-            w.defense = w.defense[:-1]
+            w.S.defense = w.S.defense[:-1]
         # Submit finished string: CR, LF, VT, FF, ESC.
         elif c in {10, 13, 11, 12, 27}:
             # Clear message and submit handle completed defense string.
-            w.message = ''
-            w.defense_submitted = w.defense # qqq add defense_submitted to W
+            w.S.message = ''
+            w.S.defense_submitted = w.S.defense
         # Other control characters. QQQ we have not dealt with arrow keys.
         elif c == -1 or not (32 <= c <= 126):
             pass
-        # For checking other delete characters, use w.defense += str(c)
+        # For checking other delete characters, use w.S.defense += str(c)
         else:
-#            w.defense += str(c)
-            w.defense += chr(c)
+#            w.S.defense += str(c)
+            w.S.defense += chr(c)
     except ValueError:
         pass
     # Append to regex string and try against attack and non-combatant strings.
@@ -244,16 +244,16 @@ def attack_defend_cycle(w):
     #    Finished defense string is passed to assess_defense_single; 
     #    Unfinished defense string is, if possible, evaluated tentatively 
     #        against attack and noncombatant strings.
-    if w.defense_submitted:
+    if w.S.defense_submitted:
         attack_successful, collateral_damage = (
                 w.S.assess_defense_single(
-                    w.defense_submitted, attack, noncombatant))
+                    w.S.defense_submitted, attack, noncombatant))
         # Check defense against past regexes; invalidate if found.
-        if w.defense_submitted in w.S.defense_record:
-            w.message = 'This defense has already been used; invalid.'
+        if w.S.defense_submitted in w.S.defense_record:
+            w.S.message = 'This defense has already been used; invalid.'
         else:
-            w.S.defense_record.add(w.defense_submitted)
-            w.defense_submitted = ''
+            w.S.defense_record.add(w.S.defense_submitted)
+            w.S.defense_submitted = ''
 
 charset_dict = {
         'a': string.ascii_lowercase,
