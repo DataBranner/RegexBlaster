@@ -40,7 +40,7 @@ An arcade game to practice regular expressions.
 
 ### Versions
 
- * 06 Control window size. Move message to rjust().
+ * 06 Control window size. Move message to `rjust()`.
 
  * 05 Color and label different sub-windows. Trap delete and CR control chars.
 
