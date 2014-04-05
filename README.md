@@ -8,6 +8,21 @@ All output is via command-line interface.
 
 ---
 
+### Scoring
+
+ * No points for ordinary characters.
+
+ * One point for operators `.`, `|`, `?`, `^`, `$`.
+
+ * Two points for character sets with `[...]`, groups with `(...)`, and each use of Kleene star `*` (and `+`).
+
+ * Five points for back-references (`\1`, etc.) and repetition, as `{2}` or `{2, 5}`.
+
+ * Ten points for look-ahead and look-behind.
+
+Replacement is not yet dealt with but should also figure.
+
+
 ### To do
 
  1. Printed messages move to `message`.
