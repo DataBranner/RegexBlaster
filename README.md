@@ -25,8 +25,6 @@ Replacement is not yet dealt with but should also figure.
 
 ### To do
 
- 1. Printed messages move to `message`.
-
  1. Item gradually fading into or out of view. Useful for hits.
 
  1. Display attack/noncombatant string and strings.
