@@ -3,20 +3,7 @@
 # David Prager Branner
 # 20140405
 
-"""Explore the use of Ncurses.
-
-next Set background color: automatically black for now.
-next Handle failed attack and non-combatant strings.
-next Apply regex to attack string and non-combatant strings.
-next Display attack/noncombatant string and strings.
-next Item gradually fading into or out of view. Useful for hits.
-06 Control window size. Move message to rjust().
-05 Color and label different sub-windows. Trap delete and CR control chars.
-04 Set up different sub-windows. Separate Timer class. Defense line.
-03 Get styled text working; no display delay on startup..
-02 Set up and close curses in special functions; always trap ctrl-c.
-01 Open window; close on two backticks.
-"""
+"""Arcade game to help user practice regular expressions. Curses version."""
 
 import sys
 # Not necessary: appears to work in Python 2.
