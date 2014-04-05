@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_06.py
 # David Prager Branner
-# 20140405
+# 20140405, works
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
@@ -72,20 +72,33 @@ class Scorer():
         """Update score, damage, and level based on defense results."""
         if attack_successful and not collateral_damage:
             # Defeat attack
-            print('Successful defense without non-combatant casualties.')
+            self.message = (
+                    'Successful defense without non-combatant casualties.')
+            self.fade_out()
             self.defeated_attacks.append(attack)
             self.score += 1 * self.level
             self.level += .1
         elif collateral_damage:
-            print('Non-combatant casualties!')
+            self.message = 'Non-combatant casualties!'
+            self.highlight_failure()
             # Assess penalty
             self.score -= 1 * self.level
         if not attack_successful:
-            print('Defense failed!')
+            self.message = 'Defense failed!'
             # Hit increases damage
             self.damage -= 1
 
-    def advance_fade_out(self):
+    def fade_out(self):
+        """Make item fade out gradually.
+
+        Intended for use with defeated attack strings.
+        """
+        pass
+
+    def highlight_failure(self):
+        """Reverse item.
+
+        Intended for use with failed attacks or non-combatants hit."""
         pass
 
 
@@ -199,8 +212,6 @@ def main():
 
 def main_loop(w):
     while w.S.damage > 0:
-        # Different subwindows: scores, main window, messages, defense-strings.
-        # Add code only to update every second or on change.
         curses.delay_output(10)
         w.display_score()
         w.display_message()
