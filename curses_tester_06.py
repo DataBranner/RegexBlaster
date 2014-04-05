@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_06.py
 # David Prager Branner
-# 20140404
+# 20140405
 
 """Explore the use of Ncurses.
 
@@ -19,9 +19,10 @@ next Item gradually fading into or out of view. Useful for hits.
 """
 
 import sys
-if sys.version_info[0] != 3:
-    print('Python 3 required.')
-    sys.exit()
+# Not necessary: appears to work in Python 2.
+#if sys.version_info[0] != 3:
+#    print('Python 3 required.')
+#    sys.exit()
 import curses
 import random
 import time
