@@ -26,7 +26,7 @@ All output is via command-line interface.
 
  1. ESC: toggle pause/continue; from paused state, h => help page.
 
- 1. Handle arrow keys.
+ 1. Handle arrow keys. Related to handling of ESC; see http://stackoverflow.com/a/1182680/621762.
 
  1. Report results in file or to screen on close.
 
@@ -56,7 +56,7 @@ All output is via command-line interface.
 
 ### Versions
 
- * 06 Control window size. Move message to `rjust()`. Move `defense` and `message` strings to `Scorer`.
+ * 06 Control window size. Move message to `rjust()`. Move `defense` and `message` strings to `Scorer`. Goal: to segregate all Curses-related functionality in `Window` class, so that JS version can be added withough substantial refactoring.
 
  * 05 Color and label different sub-windows. Trap delete and CR control chars.
 
