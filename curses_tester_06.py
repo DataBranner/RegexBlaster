@@ -6,7 +6,8 @@
 """Explore the use of Ncurses.
 
 next Set background color: automatically black for now.
-next Apply regex to attack string.
+next Handle failed attack and non-combatant strings.
+next Apply regex to attack string and non-combatant strings.
 next Display attack/noncombatant string and strings.
 next Item gradually fading into or out of view. Useful for hits.
 06 Control window size. Move message to rjust().
