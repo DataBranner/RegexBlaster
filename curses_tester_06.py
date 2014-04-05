@@ -5,7 +5,10 @@
 
 """Explore the use of Ncurses.
 
+next Set background color: automatically black for now.
 next Apply regex to attack string.
+next Display attack/noncombatant string and strings.
+next Item gradually fading into or out of view. Useful for hits.
 06 Control window size. Move message to rjust().
 05 Color and label different sub-windows. Trap delete and CR control chars.
 04 Set up different sub-windows. Separate Timer class. Defense line.
@@ -90,6 +93,9 @@ class Scorer():
             # Hit increases damage
             self.damage -= 1
 
+    def advance_fade_out(self):
+        pass
+
 
 class Window():
     def __init__(self):
@@ -170,7 +176,9 @@ class Window():
         self.stdscr.addstr(
                 curses.LINES-2, 0, self.message.rjust(80, ' '), 
                 curses.color_pair(142))
-        # Anything deleted is overwritten with blackness (color pair 1).
+        # The following was commented out when self.message was replaced with
+        # self.message.rjust.
+#        # Anything deleted is overwritten with blackness (color pair 1).
 #        self.stdscr.chgat(curses.LINES-2, len(self.message), -1,
 #                curses.color_pair(1))
 
@@ -204,18 +212,13 @@ def main_loop(w):
     while w.S.damage > 0:
         # Different subwindows: scores, main window, messages, defense-strings.
         # Add code only to update every second or on change.
-        curses.delay_output(25)
+        curses.delay_output(10)
         w.display_score()
         w.display_message()
         w.display_defense()
         attack_defend_cycle(w)
     if w.S.damage <= 0:
         w.message = 'Your player has been destroyed in battle. Game over.'
-
-
-# Things to do:
-# Item gradually fading into or out of view. Useful for hits.
-# Set background color: automatically black for now.
 
 #######################
 # End of program body #
