@@ -6,6 +6,10 @@ An arcade game to practice regular expressions.
 
 ### To do
 
+ 1. Move `defense` and `message` strings to `Scorer`.
+
+ 1. Printed messages move to `message`.
+
  1. Item gradually fading into or out of view. Useful for hits.
 
  1. Display attack/noncombatant string and strings.
@@ -18,6 +22,14 @@ An arcade game to practice regular expressions.
 
  1. Set background color: automatically black for now.
 
+ 1. ESC: toggle pause/continue; from paused state, h => help page.
+
+ 1. Handle arrow keys.
+
+ 1. Report results in file or to screen on close.
+
+ 1. Help page on start-up. 
+ 
  1. User corrects regex offered by machine.
 
  1. Handle near-identical defenses:
