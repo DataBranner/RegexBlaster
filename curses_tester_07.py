@@ -284,17 +284,20 @@ def attack_defend_cycle(cd):
     #    Unfinished defense string is, if possible, evaluated tentatively 
     #        against attack and noncombatant strings.
     if cd.S.defense_submitted:
-        self.new_attacks = True
-        self.new_noncomb = True
-        attack_successful, collateral_damage = (
-                cd.S.assess_defense_single(
-                    cd.S.defense_submitted, cd.S.attack, cd.S.noncombatant))
+        cd.S.new_attacks = True
+        cd.S.new_noncomb = True
         # Check defense against past regexes; invalidate if found.
         if cd.S.defense_submitted in cd.S.defense_record:
             cd.S.message = 'This defense has already been used; invalid.'
         else:
             cd.S.defense_record.add(cd.S.defense_submitted)
+            # Evaluate defense.
+            attack_successful, collateral_damage = (
+                    cd.S.assess_defense_single(
+                        cd.S.defense_submitted, cd.S.attack, cd.S.noncombatant))
             cd.S.defense_submitted = ''
+            # qqq act on attack_successful, collateral_damage with
+            # score_defense
 
 charset_dict = {
         'a': string.ascii_lowercase,
