@@ -25,17 +25,13 @@ Replacement is not yet dealt with but should also figure.
 
 ### To do
 
- 1. Item gradually fading into or out of view. Useful for hits.
-
- 1. Display attack/noncombatant string and strings.
+ 1. Handle failed attack and non-combatant strings.
 
  1. Apply regex to attack string and non-combatant strings, showing partial matches in real time.
 
- 1. Handle failed attack and non-combatant strings.
+ 1. Item gradually fading into or out of view. Useful for hits.
 
  1. Multiple attack and/or noncombatant strings. More points for multiple matches at once.
-
- 1. Set background color: automatically black for now.
 
  1. ESC: toggle pause/continue; from paused state, h => help page.
 
@@ -48,6 +44,8 @@ Replacement is not yet dealt with but should also figure.
  1. Help page on start-up. 
  
  1. User corrects regex offered by machine.
+
+ 1. Set background color: automatically black for now.
 
  1. Handle near-identical defenses:
 
