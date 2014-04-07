@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # regex_blaster_08.py
 # David Prager Branner
-# 20140407, fade-out and reverse working
+# 20140407
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
@@ -85,13 +85,12 @@ def attack_defend_cycle(cd):
     #    Unfinished defense string is, if possible, evaluated tentatively 
     #        against attack and noncombatant strings.
     if cd.S.defense_submitted:
-        cd.S.new_attacks = True
-        cd.S.new_noncomb = True
         # Check defense against past regexes; invalidate if found.
         if cd.S.defense_submitted in cd.S.defense_record:
             cd.S.message = 'This defense has already been used; invalid.'
-            # QQQ must let user try again.
         else:
+            cd.S.new_attacks = True
+            cd.S.new_noncomb = True
             cd.S.defense_record.add(cd.S.defense_submitted)
             # Evaluate defense.
             cd.S.assess_defense_single()
