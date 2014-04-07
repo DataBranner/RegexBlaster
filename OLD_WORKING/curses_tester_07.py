@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # curses_tester_07.py
 # David Prager Branner
-# 20140405
+# 20140405, runs but not all functions work yet.
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
