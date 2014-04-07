@@ -71,7 +71,14 @@ Replacement is not yet dealt with but should also figure.
 
 ### Versions
 
- * 08 Changed name of main file to to `regex_blaster`; `Timer`, `Scorer`, and `CursesDisplay` moved out to discrete files.
+ * 08 Changed name of main file to to `regex_blaster`; `Timer`, `Scorer`, and `CursesDisplay` moved out to discrete files. `CursesDisplay.fade_out` and `CursesDisplay.highlight_failure` work. Problems: 
+
+   * if defense is a repeat, user needs to be able to try again;
+   * don't generate new noncombatant if existing non-combatant is not martyred;
+   * if defense succeeds, next attack is in same place as previous one;
+   * need more productive attacks and noncombatants;
+   * better name for "damage";
+   * need scoring program to evaluate defense strings.
 
  * 07 Unique failed defense string generates new attack and noncombatant strings.
 
