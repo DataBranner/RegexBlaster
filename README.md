@@ -71,6 +71,8 @@ Replacement is not yet dealt with but should also figure.
 
 ### Versions
 
+ * 09 `evaluate_defense` appears to be working (lookaround not yet checked); test suite created for this.
+
  * 08 Changed name of main file to to `regex_blaster`; `Timer`, `Scorer`, and `CursesDisplay` moved out to discrete files. `CursesDisplay.fade_out` and `CursesDisplay.highlight_failure` work. Problems: 
 
    * if defense is a repeat, user needs to be able to try again;
