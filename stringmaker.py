@@ -1,6 +1,6 @@
 # stringmaker.py
 # David Prager Branner
-# 20140329
+# 20140407
 
 """Construct various "attack" strings for Regex Blaster."""
 
@@ -46,7 +46,8 @@ class StringMaker():
             fill_stuff += '\n'
         repeats = random.randint(2, 5)
         string_length = random.randint(2, 5)
-        germ = ''.join([random.choice(germ_stuff) for i in range(string_length)])
+        germ = ''.join(
+                [random.choice(germ_stuff) for i in range(string_length)])
         string_length = random.randint(1, string_length+1)
         string_w_repeats = ''
         for i in range(repeats):
