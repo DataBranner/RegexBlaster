@@ -42,14 +42,16 @@ class CursesDisplay():
         # Create and configure main half-screen subwindows.
         self.half_screen = curses.COLS//2
         self.attacks = curses.newwin(curses.LINES-3, self.half_screen, 1, 0)
-        self.attacks.attrset(curses.color_pair(198))
+        self.attacks_color = curses.color_pair(198)
+        self.attacks.attrset(self.attacks_color)
         self.attacks.addstr(1, 0, 'ATTACK STRINGS (KILL THESE)'.
                 center(self.half_screen, ' '), curses.A_UNDERLINE |
-                curses.color_pair(198))
+                self.attacks_color)
         self.attacks.box()
         self.noncomb = curses.newwin(
                 curses.LINES-3, self.half_screen, 1, self.half_screen)
-        self.noncomb.attrset(curses.color_pair(47))
+        self.noncomb_color = curses.color_pair(47)
+        self.noncomb.attrset(self.noncomb_color)
         self.noncomb.addstr(1, 0, '''NON-COMBATANT STRINGS (DO NOT KILL)'''.
                 center(self.half_screen, ' '), curses.A_UNDERLINE)
         self.noncomb.box()
@@ -120,15 +122,23 @@ class CursesDisplay():
                     self.noncomb_row, 1,
                     self.S.noncombatant.center(self.half_screen-2, ' '))
 
-    def fade_out(self):
+    def fade_out(self, object, y, x, length):
         """Make item fade out gradually.
 
         Intended for use with defeated attack strings.
         """
-        pass
+        fade_colors = [
+                197, 203, 209, 215, 221, 227, 228, 229, 230, 231, 232,
+                255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
+                244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233]
+        for color in fade_colors:
+            object.chgat(y, x, length, curses.color_pair(color))
+            self.refresh()
+            curses.delay_output(40)
+        # QQQ this should happen while other things are happening.
 
-    def highlight_failure(self):
+    def highlight_failure(self, object, y, x, length):
         """Reverse item and turn it the color of an attack.
 
         Intended for use with failed attacks or non-combatants hit."""
-        pass
+        object.chgat(y, x, length, curses.A_REVERSE | self.attacks_color)

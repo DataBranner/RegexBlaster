@@ -7,7 +7,7 @@ import time
 import datetime
 
 class Timer():
-    def __init__(self, time_limit=30):
+    def __init__(self, time_limit=300):
         self.start_time = time.time()
         self.time_limit = time_limit
         self.update()
