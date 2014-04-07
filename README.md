@@ -57,6 +57,8 @@ Replacement is not yet dealt with but should also figure.
 
  1. Invalid defense string may lead to score reduction or other penalties.
 
+ 1. Program generates regex and user must supply matching string.
+
  1. Evaluate quality of defense for more scores or greater level increase.
 
  1. Figure damage (from hits); it may affect time of defense's effect..
@@ -68,6 +70,10 @@ Replacement is not yet dealt with but should also figure.
  1. JS version.
 
 ### Versions
+
+ * 08 Changed name of main file to to `regex_blaster`; `Timer`, `Scorer`, and `CursesDisplay` moved out to discrete files.
+
+ * 07 Unique failed defense string generates new attack and noncombatant strings.
 
  * 06 Control window size. Move message to `rjust()`. Move `defense` and `message` strings to `Scorer`. Goal: to segregate all Curses-related functionality in `Window` class, so that JS version can be added withough substantial refactoring.
 
