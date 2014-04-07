@@ -18,7 +18,11 @@ class Scorer():
         self.defense = ''
         self.defense_submitted = ''
         self.attack = ''
+        self.attack_y = 0
+        self.attack_x = 0
         self.noncombatant = ''
+        self.noncomb_y = 0
+        self.noncomb_x = 0
         self.message = ''
         self.new_attacks = True
         self.new_noncomb = True
@@ -50,17 +54,18 @@ class Scorer():
             # Defeat attack
             self.message = (
                     'Successful defense without non-combatant casualties.')
-            self.fade_out()
+#            self.fade_out(self.attack_y_x, self.attack)
             self.defeated_attacks.append(self.attack)
-            self.score += self.level # QQQ call evaluate_defense()
+            self.score += round(self.level, 2) # QQQ call evaluate_defense()
             self.level += .1
         elif self.collateral_damage:
             self.message = 'Non-combatant casualties!'
-            self.highlight_failure()
+#            self.highlight_failure()
             # Assess penalty
             self.score -= self.level # QQQ call evaluate_defense()
         if not self.attack_successful:
             self.message = 'Defense failed!'
+#            self.highlight_failure()
             # Hit increases damage
             self.damage -= 1
 

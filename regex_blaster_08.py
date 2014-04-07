@@ -90,13 +90,25 @@ def attack_defend_cycle(cd):
         # Check defense against past regexes; invalidate if found.
         if cd.S.defense_submitted in cd.S.defense_record:
             cd.S.message = 'This defense has already been used; invalid.'
+            # QQQ must let user try again.
         else:
             cd.S.defense_record.add(cd.S.defense_submitted)
             # Evaluate defense.
             cd.S.assess_defense_single()
             cd.S.defense_submitted = ''
-            # qqq act on attack_successful, collateral_damage with
-            # cd.S.score_defense and cd.fade_out or cd.highlight_failure
+            # Act on attack_successful, collateral_damage
+            cd.S.score_defense()
+            cd.S.defense = ''
+            if cd.S.attack_successful and not cd.S.collateral_damage:
+                # Fade attack. 
+                cd.fade_out(
+                        cd.attacks, cd.attacks_row, 1, cd.half_screen-2)
+            elif cd.S.collateral_damage:
+                cd.highlight_failure(
+                        cd.noncomb, cd.noncomb_row, 1, cd.half_screen-2)
+            elif not cd.S.attack_successful:
+                cd.highlight_failure(
+                        cd.attacks, cd.attacks_row, 1, cd.half_screen-2)
 
 charset_dict = {
         'a': string.ascii_lowercase,
