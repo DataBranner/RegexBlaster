@@ -8,21 +8,17 @@ import random # used only for dummy values
 
 
 class Scorer():
-    def __init__(self):
+    def __init__(self, attack_limit):
         self.score = 0
         self.level = 1
-        self.damage = 10
+        self.attack_limit = attack_limit # QQQ change this to attack_limit
         self.defense_record = set()
         self.defeated_attacks = []
         self.martyred_noncombatants = []
         self.defense = ''
         self.defense_submitted = ''
         self.attack = ''
-        self.attack_y = 0
-        self.attack_x = 0
         self.noncombatant = ''
-        self.noncomb_y = 0
-        self.noncomb_x = 0
         self.message = ''
         self.new_attacks = True
         self.new_noncomb = True
@@ -67,7 +63,7 @@ class Scorer():
             self.message = 'Defense failed!'
 #            self.highlight_failure()
             # Hit increases damage
-            self.damage -= 1
+            self.attack_limit -= 1
 
     def evaluate_defense(self):
         """Check for presence of scoreable operators and grade accordingly."""

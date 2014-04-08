@@ -5,13 +5,10 @@
 
 import curses
 import random
-from timer import Timer
 from scorer import Scorer
 
 class CursesDisplay():
     def __init__(self):
-        self.T = Timer()
-        self.S = Scorer()
         self.maxlines = 30
         self.attacks_row = 2
         self.attacks_max = self.maxlines - 5
@@ -66,38 +63,24 @@ class CursesDisplay():
     def end_game(self):
         self.window.nodelay(0)
 
-    def display_score(self):
-        # QQQ Since display_score is called from main, T can be removed here.
-        # QQQ Score format can be handled by Score class.
-        if self.T.time_left < 0:
-            self.end_game()
-        else:
-            self.score = ('''Score: {:>4}  Level: {:>4}  Damage: {:>3}  '''
-                    '''Time remaining: {:<8}'''.
-                    format(self.S.score,
-                        random.randint(1, 100), random.randint(1, 100),
-                        self.T.time_left_str))
-            self.T.update()
-            self.stdscr.addstr(0, 0, self.score)
-            self.stdscr.attrset(curses.color_pair(16))
-            self.refresh()
+    def display_score(self, score, time, attack_limit):
+        self.score = ('''Score: {:>4}  Level: {:>4}  '''
+                '''Attacks remaining: {:>3}  Time : {:<8}'''.
+                format(score,
+                    random.randint(1, 100), attack_limit, time))
+        self.stdscr.addstr(0, 0, self.score)
+        self.stdscr.attrset(curses.color_pair(16))
+        self.refresh()
 
-    def display_message(self):
+    def display_message(self, message):
         """Display message about game state."""
-        # QQQ message format can be handled by main.
         self.stdscr.addstr(
-                curses.LINES-2, 0, self.S.message.rjust(80, ' '), 
+                curses.LINES-2, 0, message.rjust(80, ' '), 
                 curses.color_pair(142))
-        # The following was commented out when self.S.message was replaced with
-        # self.S.message.rjust.
-#        # Anything deleted is overwritten with blackness (color pair 1).
-#        self.stdscr.chgat(curses.LINES-2, len(self.S.message), -1,
-#                curses.color_pair(1))
 
-    def display_defense(self):
+    def display_defense(self, defense):
         """Display user's defense string."""
-        # QQQ defense string format can be handled by main
-        defense_line = 'defense: ' + self.S.defense
+        defense_line = 'defense: ' + defense
         # Defense line appears in white (color pair 16).
         self.stdscr.addstr(
                 curses.LINES-1, 0, defense_line, curses.color_pair(16))
@@ -105,9 +88,8 @@ class CursesDisplay():
         self.stdscr.chgat(curses.LINES-1, len(defense_line), -1,
                 curses.color_pair(1))
 
-    def display_attacks(self):
+    def display_attacks(self, attack):
         """Display attack string."""
-        # QQQ attack string format can be handled by main
         # QQQ Can this and display_noncomb() be merged, since func similar?
         if self.attacks_row >= self.attacks_max:
             self.end_game()
@@ -115,18 +97,17 @@ class CursesDisplay():
             self.attacks_row += 1
             self.attacks.addstr(
                     self.attacks_row, 1,
-                    self.S.attack.center(self.half_screen-2, ' '))
+                    attack.center(self.half_screen-2, ' '))
 
-    def display_noncomb(self):
+    def display_noncomb(self, noncombatant):
         """Display noncombatant string."""
-        # QQQ noncombatant string format can be handled by main
         if self.noncomb_row >= self.noncomb_max:
             self.end_game()
         else:
             self.noncomb_row += 1
             self.noncomb.addstr(
                     self.noncomb_row, 1,
-                    self.S.noncombatant.center(self.half_screen-2, ' '))
+                    noncombatant.center(self.half_screen-2, ' '))
 
     def fade_out(self, object, y, x, length):
         """Make item fade out gradually.
