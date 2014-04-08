@@ -2,14 +2,14 @@
 
  1. Abstract `Timer` and `Scorer` from `CursesDisplay`?
 
- 1. Use `argparse` for some command-line options: `random.seed()` for `--debug`; `--log`; `--help`.
+ 1. Use `argparse` for some command-line options: 
+
+  2. `--debug`: turns on `random.seed()`; 
+  2. `--log` (must first implement logging); 
+  2. `--help`: show rules without running program?;
+  2. `--levels`: pre-defined series of levels, for systematic practice.
 
  1. Better name for `damage`; do we need it? Better to quantify how far from end of game we are. If so, implement it and `level`.
-
- 1. Add options
-
-  2. logging
-  2. pre-defined series of levels, for systematic practice.
 
  1. Handle failed attack and non-combatant strings without inadvertently pausing program.
 
@@ -37,8 +37,6 @@
   2. evaluate by edit-distance vis-à-vis all previous defenses; average string-length minus edit-distance may be more useful than edit-distance alone.
   2. **DONE**: handle by repeating attack string; repeat defense barred;
   2. handle by delaying efficacy, thus increasing risk of hit; this requires implementing timing of attacks (not sure if this is desirable until higher levels).
-
- 1. Invalid defense string may lead to score reduction or other penalties.
 
  1. Figure damage (from hits); it may affect time of defense's effect.
 
