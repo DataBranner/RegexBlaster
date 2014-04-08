@@ -17,8 +17,8 @@ class Scorer():
         self.martyred_noncombatants = []
         self.defense = ''
         self.defense_submitted = ''
-        self.attack = ''
-        self.noncombatant = ''
+        self.attack = [None, None]
+        self.noncombatant = [None, None]
         self.message = ''
         self.new_attacks = True
         self.new_noncomb = True
@@ -30,18 +30,18 @@ class Scorer():
         # Attack; later we need to be able to handle multiple attacks.
         self.attack_successful = False
         try:
-            match = re.search(self.defense, self.attack).group()
+            match = re.search(self.defense, self.attack[-1]).group()
         except AttributeError or TypeError:
             match = None
-        if self.attack == match:
+        if self.attack[-1] == match:
             self.attack_successful = True
         # Non-targets (penalty for hitting); later need to handle multiple.
         self.collateral_damage = False
         try:
-            match = re.search(self.defense, self.noncombatant).group()
+            match = re.search(self.defense, self.noncombatant[-1]).group()
         except AttributeError or TypeError:
             match = None
-        if self.noncombatant == match:
+        if self.noncombatant[-1] == match:
             self.collateral_damage = True
 
     def score_defense(self):
@@ -50,7 +50,7 @@ class Scorer():
             # Gain the number of points calculated by evaluate_defense.
             self.message = (
                     'Successful defense without non-combatant casualties.')
-            self.defeated_attacks.append(self.attack)
+            self.defeated_attacks.append(self.attack[-1])
             self.evaluate_defense(score_change='plus')
             self.level += .1
         else:

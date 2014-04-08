@@ -40,21 +40,31 @@ def main():
 ###################
 
 def main_loop(cd):
-    while S.attack_limit > 0:
+    """Endless loop until maximum failed defenses or non-comb death occurs."""
+    # S.attack_limit > len(S.attack) because we need only the minimum failed
+    #     defenses. 
+    while (S.attack_limit > len(S.attack) and 
+            S.attack_limit > len(S.noncombatant) - 1):
         if T.time_limit and T.time_to_display < 0:
             cd.end_game()
         else:
             T.update()
             curses.delay_output(10)
-            cd.display_score(S.score, T.time_to_display_str, S.attack_limit)
-            cd.display_message(S.message)
             cd.display_defense(S.defense)
             attack_defend_cycle(cd)
-    if S.attack_limit <= 0:
-        S.message = ('''Your player has been destroyed in battle. '''
-                '''Game over; ctrl-c to quit.''')
-        cd.display_message(S.message)
-        cd.refresh()
+            cd.display_score(S.score, T.time_to_display_str, 
+                    S.attack_limit-len(S.attack), 
+                    S.attack_limit-len(S.noncombatant)+1)
+            cd.display_message(S.message)
+    S.message = ('''Your player has been destroyed in battle. '''
+            '''Game over; ctrl-c to close window.''' + 
+            ' ' + str(S.attack_limit) + 
+            ' ' + str(len(S.noncombatant)))
+    cd.display_message(S.message)
+    cd.stdscr.noutrefresh()
+    curses.doupdate()
+    while True:
+        pass
 
 #######################
 # End of program body #
@@ -64,12 +74,12 @@ def attack_defend_cycle(cd):
     # Generate "attack" string (must be matched to avoid hit)
     if S.new_attacks:
         S.new_attacks = False
-        S.attack = generate_string()
+        S.attack.append(generate_string())
         cd.display_attacks(S.attack)
     # Generate "noncombatant" string (must be matched to avoid score-loss)
     if S.new_noncomb:
         S.new_noncomb = False
-        S.noncombatant = generate_string()
+        S.noncombatant.append(generate_string())
         cd.display_noncomb(S.noncombatant)
     #
     # Battle state loop.
@@ -112,19 +122,22 @@ def attack_defend_cycle(cd):
             # Act on attack_successful, collateral_damage
             S.score_defense()
             S.defense = ''
-            if S.attack_successful and not S.collateral_damage:
-                # Fade attack. 
+            if S.attack_successful:
+                # Fade and remove attack. 
                 cd.fade_out(
-                        cd.attacks, cd.attacks_row, 1, cd.half_screen-2)
-                if cd.attacks_row > 2:
-                    cd.attacks_row -= 1
-                cd.noncomb_row -= 1
-            elif S.collateral_damage:
+                        cd.attacks, len(S.attack), 1, cd.half_screen-2)
+                del S.attack[-1]
+            else:
                 cd.highlight_failure(
-                        cd.noncomb, cd.noncomb_row, 1, cd.half_screen-2)
-            elif not S.attack_successful:
+                        cd.attacks, len(S.attack), 1, cd.half_screen-2)
+            if S.collateral_damage:
                 cd.highlight_failure(
-                        cd.attacks, cd.attacks_row, 1, cd.half_screen-2)
+                        cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
+            else:
+                # Fade and remove non-combatant. 
+                cd.fade_out(
+                        cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
+                del S.noncombatant[-1]
 
 charset_dict = {
         'a': string.ascii_lowercase,
@@ -152,4 +165,4 @@ def generate_string(length=5, typestring='aA', varying=False):
     return ''.join([random.choice(charset) for i in range(length)])             
 
 if __name__ == '__main__':
-    curses.wrapper(main())
+    main()
