@@ -96,4 +96,20 @@ def test_evaluate_defense_12():
     S.evaluate_defense()
     assert S.score == 34
 
+def test_evaluate_defense_13():
+    """Test wildcards, charset."""
+    S = scorer.Scorer()
+    S.attack = 'ataac'
+    S.defense = '.t..[a2;].'
+    S.evaluate_defense()
+    assert S.score == 6
+
+def test_evaluate_defense_14():
+    """Test wildcards, and positive/negative charsets."""
+    S = scorer.Scorer()
+    S.attack = 'ataac'
+    S.defense = r'.[^F]..[a2;].'
+    S.evaluate_defense()
+    assert S.score == 8
+
 
