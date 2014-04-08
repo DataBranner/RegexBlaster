@@ -8,6 +8,8 @@ All output is via command-line interface.
 
 Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed.
 
+Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense.
+
 ---
 
 ### Scoring
