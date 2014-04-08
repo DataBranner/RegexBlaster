@@ -78,7 +78,7 @@ class Scorer():
         # Two points for character sets with [...], groups with (...), 
         #     and each use of Kleene star * (and +).
         twopoints_charsets = '\[.+?\]'
-        self.score += len(re.findall(twopoints_charsets, self.defense))
+        self.score += 2 * len(re.findall(twopoints_charsets, self.defense))
         # Delete the contents of [...] so .|?^${}() there are not counted again.
         self.defense = re.sub(twopoints_charsets, '', self.defense)
         # Score of (...) is different from (?...) so exclude the latter here.
