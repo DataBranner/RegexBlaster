@@ -1,14 +1,16 @@
 ## Regex Blaster
 
-An arcade game to practice regular expressions.
+**An arcade game to practice regular expressions.**
 
-Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4.
+Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface.
 
-All output is via command-line interface.
+Outline of game:
 
-Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed.
+ * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. 
 
-Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense.
+ * Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense.
+
+ * Game ends when the "attack" or "noncombatant" window fills with failures.
 
 ---
 
