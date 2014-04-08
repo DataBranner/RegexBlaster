@@ -25,7 +25,11 @@ Replacement is not yet dealt with but should also figure.
 
 ### To do
 
- 1. Handle failed attack and non-combatant strings.
+ 1. Handle failed attack and non-combatant strings without inadvertently pausing program.
+
+ 1. Abstract `Timer` and `Scorer` from `CursesDisplay`.
+
+ 1. Use `argparse` for some command-line options: `random.seed()` for `--debug`.
 
  1. Apply regex to attack string and non-combatant strings, showing partial matches in real time.
 
