@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # scorer.py
 # David Prager Branner
-# 20140407
+# 20140408
 
 import re
 import random # used only for dummy values
@@ -11,7 +11,7 @@ class Scorer():
     def __init__(self, attack_limit=25):
         self.score = 0
         self.level = 1
-        self.attack_limit = attack_limit # QQQ change this to attack_limit
+        self.attack_limit = attack_limit
         self.defense_record = set()
         self.defeated_attacks = []
         self.martyred_noncombatants = []
@@ -68,15 +68,17 @@ class Scorer():
         else:
                 score_change = -1
         # No points at all for ordinary characters; this is not regex.
-        # Normally, should fail if ^ or $ at impossible locations, but this 
-        #    situation never occurs because it is caught by `re` first.
+        # Would fail if ^ or $ at impossible locations, but this situation
+        #    never occurs because it is always caught by `re` before the 
+        #    present function is called.
         #
         # Two points for character sets with [...], groups with (...), 
         #     and each use of Kleene star * (and +).
         twopoints_charsets = '\[.+?\]'
         self.score += score_change * 2 * len(
                 re.findall(twopoints_charsets, self.defense))
-        # Delete the contents of [...] so .|?^${}() there are not counted again.
+        # Delete the contents of [...] so cases of operators .|?^${}() there 
+        #     are not counted a second time below.
         self.defense = re.sub(twopoints_charsets, '', self.defense)
         # Score of (...) is different from (?...) so exclude the latter here.
         twopoints_groups_star_plus = '\([^?].*?\)|\*|\+'

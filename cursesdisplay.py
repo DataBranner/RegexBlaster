@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # cursesdisplay.py
 # David Prager Branner
-# 20140407
+# 20140408
 
 import curses
 import random
@@ -61,6 +61,7 @@ class CursesDisplay():
         curses.doupdate()
 
     def end_game(self):
+        self.refresh()
         self.window.nodelay(0)
 
     def display_score(self, score, time, attack_limit):
