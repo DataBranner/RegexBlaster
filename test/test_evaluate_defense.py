@@ -80,4 +80,20 @@ def test_evaluate_defense_10():
     S.evaluate_defense()
     assert S.score == 14
 
+def test_evaluate_defense_11():
+    """Test wildcards, group, backref, repetition, negative lookahead."""
+    S = scorer.Scorer()
+    S.attack = 'ataac'
+    S.defense = r'(.)t\1{2}g.(?!X)'
+    S.evaluate_defense()
+    assert S.score == 24
+
+def test_evaluate_defense_12():
+    """Test wildcards, group, backref, repetition, lookarounds.."""
+    S = scorer.Scorer()
+    S.attack = '7ataac'
+    S.defense = r'(?=7)(.)t\1{2}g.(?!X)'
+    S.evaluate_defense()
+    assert S.score == 34
+
 
