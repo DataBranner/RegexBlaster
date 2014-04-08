@@ -13,7 +13,7 @@
 
  1. Handle failed attack and non-combatant strings without inadvertently pausing program.
 
- 1. Need more productive attacks and noncombatants: 
+ 1. Need more productive attacks and noncombatants; revise `stringmaker.py` and incorporate into main program: 
 
   2. levels, allowing progressively more complex attack strings
   2. generate attack/noncombatant strings formulaically
