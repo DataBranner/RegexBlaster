@@ -1,5 +1,7 @@
 ## Regex Blaster Past Versions
 
+ * 11 Pruned superfluous class attributes.
+
  * 10 Changes to `evaluate_defense` and 14 working tests.
 
  * 09 `evaluate_defense` appears to be working for scoring (lookaround not yet checked); test suite created for this.
