@@ -10,15 +10,15 @@ All output is via command-line interface.
 
 ### Scoring
 
- * No points for ordinary characters.
+ * No points for ordinary characters (since by themselves they are not yet a regular expression).
 
- * One point for operators `.`, `|`, `?`, `^`, `$`.
+ * One point for each operator `.`, `|`, `?`, `^`, `$`.
 
- * Two points for character sets with `[...]`, groups with `(...)`, and each use of Kleene star `*` (and `+`).
+ * Two points for each character set with `[...]`, each group with `(...)`, and each use of Kleene star `*` (and `+`).
 
- * Five points for back-references (`\1`, etc.) and repetition, as `{2}` or `{2, 5}`.
+ * Five points for each back-reference (`\1`, etc.) and each case of repetition, as `{2}` or `{2, 5}`.
 
- * Ten points for look-ahead and look-behind.
+ * Ten points for each look-ahead and look-behind.
 
 Replacement is not yet dealt with but should also figure.
 
