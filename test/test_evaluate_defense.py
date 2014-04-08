@@ -72,3 +72,12 @@ def test_evaluate_defense_09():
     S.evaluate_defense()
     assert S.score == 9
 
+def test_evaluate_defense_10():
+    """Test wildcards, group, one backref, one repetition."""
+    S = scorer.Scorer()
+    S.attack = 'ataac'
+    S.defense = r'(.)t\1{2}g.'
+    S.evaluate_defense()
+    assert S.score == 14
+
+
