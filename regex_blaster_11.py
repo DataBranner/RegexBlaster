@@ -54,8 +54,7 @@ def main_loop(cd):
         S.message = ('''Your player has been destroyed in battle. '''
                 '''Game over; ctrl-c to quit.''')
         cd.display_message(S.message)
-        while True:
-            pass
+        cd.refresh()
 
 #######################
 # End of program body #

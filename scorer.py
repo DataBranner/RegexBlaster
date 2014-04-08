@@ -8,7 +8,7 @@ import random # used only for dummy values
 
 
 class Scorer():
-    def __init__(self, attack_limit):
+    def __init__(self, attack_limit=25):
         self.score = 0
         self.level = 1
         self.attack_limit = attack_limit # QQQ change this to attack_limit
@@ -47,26 +47,26 @@ class Scorer():
     def score_defense(self):
         """Update score, damage, and level based on defense results."""
         if self.attack_successful and not self.collateral_damage:
-            # Defeat attack
+            # Gain the number of points calculated by evaluate_defense.
             self.message = (
                     'Successful defense without non-combatant casualties.')
-#            self.fade_out(self.attack_y_x, self.attack)
             self.defeated_attacks.append(self.attack)
-            self.evaluate_defense()
+            self.evaluate_defense(score_change='plus')
             self.level += .1
-        elif self.collateral_damage:
-            self.message = 'Non-combatant casualties!'
-#            self.highlight_failure()
-            # Assess penalty
-            self.score -= 1 # QQQ call evaluate_defense()
-        if not self.attack_successful:
-            self.message = 'Defense failed!'
-#            self.highlight_failure()
-            # Hit increases damage
-            self.attack_limit -= 1
+        else:
+            # Lose the number of points calculated by evaluate_defense.
+            self.evaluate_defense(score_change='minus')
+            if self.collateral_damage:
+                self.message = 'Non-combatant casualties!'
+            if not self.attack_successful:
+                self.message = 'Defense failed!'
 
-    def evaluate_defense(self):
+    def evaluate_defense(self, score_change='plus'):
         """Check for presence of scoreable operators and grade accordingly."""
+        if score_change == 'plus':
+                score_change = 1
+        else:
+                score_change = -1
         # No points at all for ordinary characters; this is not regex.
         # Normally, should fail if ^ or $ at impossible locations, but this 
         #    situation never occurs because it is caught by `re` first.
@@ -74,26 +74,30 @@ class Scorer():
         # Two points for character sets with [...], groups with (...), 
         #     and each use of Kleene star * (and +).
         twopoints_charsets = '\[.+?\]'
-        self.score += 2 * len(re.findall(twopoints_charsets, self.defense))
+        self.score += score_change * 2 * len(
+                re.findall(twopoints_charsets, self.defense))
         # Delete the contents of [...] so .|?^${}() there are not counted again.
         self.defense = re.sub(twopoints_charsets, '', self.defense)
         # Score of (...) is different from (?...) so exclude the latter here.
         twopoints_groups_star_plus = '\([^?].*?\)|\*|\+'
-        self.score += 2 * len(
+        self.score += score_change * 2 * len(
                 re.findall(twopoints_groups_star_plus, self.defense))
         #
         # One point for operators ., |, ?, ^, $.
         onepoint = '\.|\||\?|\^|\$'
-        self.score += len(re.findall(onepoint, self.defense))
+        self.score += score_change * len(re.findall(onepoint, self.defense))
         #
         # Five points for back-references (\1, etc.) and repetition, 
         #     as {2} or {2, 5}.
         fivepoints_brackets = r'\{\d+,? *\d*?\}'
-        self.score += 5 * len(re.findall(fivepoints_brackets, self.defense))
+        self.score += score_change * 5 * len(
+                re.findall(fivepoints_brackets, self.defense))
         fivepoints_backref = r'\\\d+'
-        self.score += 5 * len(re.findall(fivepoints_backref, self.defense))
+        self.score += score_change * 5 * len(
+                re.findall(fivepoints_backref, self.defense))
         #
         # Ten points for look-ahead and look-behind.
         # Note: ? here already counts as one point so (?...) counts as nine.
         tenpoints = '\(\?.+?\)'
-        self.score += 9 * len(re.findall(tenpoints, self.defense))
+        self.score += score_change * 9 * len(
+                re.findall(tenpoints, self.defense))
