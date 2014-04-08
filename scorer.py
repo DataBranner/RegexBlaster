@@ -81,7 +81,8 @@ class Scorer():
         self.score += len(re.findall(twopoints_charsets, self.defense))
         # Delete the contents of [...] so .|?^${}() there are not counted again.
         self.defense = re.sub(twopoints_charsets, '', self.defense)
-        twopoints_groups_star_plus = '\(.+?\)|\*|\+'
+        # Score of (...) is different from (?...) so exclude the latter here.
+        twopoints_groups_star_plus = '\([^?].*?\)|\*|\+'
         self.score += 2 * len(
                 re.findall(twopoints_groups_star_plus, self.defense))
         #
@@ -97,5 +98,6 @@ class Scorer():
         self.score += 5 * len(re.findall(fivepoints_backref, self.defense))
         #
         # Ten points for look-ahead and look-behind.
+        # Note: ? here already counts as one point so (?...) counts as nine.
         tenpoints = '\(\?.+?\)'
-        self.score += 10 * len(re.findall(tenpoints, self.defense))
+        self.score += 9 * len(re.findall(tenpoints, self.defense))
