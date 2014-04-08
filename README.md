@@ -6,9 +6,9 @@ Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4
 
 Outline of game:
 
- * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. 
+ * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. If the defense string is invalid or fails to match the attack, the attack is successful and the user is a step closer to losing the game.
 
- * Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense.
+ * Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense and also brings the user closer to losing the game.
 
  * Game ends when the "attack" or "noncombatant" window fills with failures.
 
