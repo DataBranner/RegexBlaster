@@ -2,9 +2,11 @@
 
 An arcade game to practice regular expressions.
 
-Currently runs at the command line in both Python 2.6 or 2.7 and Py3.
+Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4.
 
 All output is via command-line interface.
+
+Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed.
 
 ---
 
