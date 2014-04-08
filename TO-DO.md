@@ -1,6 +1,6 @@
 ## Regex Blaster To-do List
 
- 1. Abstract `Timer` and `Scorer` from `CursesDisplay`?
+ 1. Better name for `damage`; do we need it? Better to quantify how far from end of game we are. If so, implement it and `level`. Keep track of how many failed defenses there have been for each window.
 
  1. Use `argparse` for some command-line options: 
 
@@ -8,8 +8,6 @@
   2. `--log` (must first implement logging); 
   2. `--help`: show rules without running program?;
   2. `--levels`: pre-defined series of levels, for systematic practice.
-
- 1. Better name for `damage`; do we need it? Better to quantify how far from end of game we are. If so, implement it and `level`.
 
  1. Handle failed attack and non-combatant strings without inadvertently pausing program.
 
