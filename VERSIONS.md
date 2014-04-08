@@ -1,6 +1,6 @@
 ## Regex Blaster Past Versions
 
- * 11 Pruned superfluous class attributes; moved `Timer` and `Scorer` instantiation to main. Changed timing to time passed, with time-limit optional.
+ * 11 Pruned superfluous class attributes; moved `Timer` and `Scorer` instantiation to main. Changed timing to time passed, with time-limit optional. Revise `evaluate_defense` to both raise and lower score, depending on input, which comes only from `score_defense`.
 
  * 10 Changes to `evaluate_defense` and 14 working tests.
 
