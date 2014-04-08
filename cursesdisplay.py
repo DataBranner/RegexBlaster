@@ -15,6 +15,18 @@ class CursesDisplay():
         self.noncomb_row = 2
         self.noncomb_max = self.maxlines - 5
         self.set_up_curses()
+        self.fade_colors = {
+                self.attacks: [
+                197, 203, 209, 215, 221, 
+                227, 228, 229, 230, 231, 232,
+                255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
+                244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233],
+                self.noncomb: [
+                47, 48, 49, 50, 51, 52, 
+                88, 124, 160, 196, 232,
+                255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
+                244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233],
+                }
 
     def set_up_curses(self):
         # Instantiate standard screen object.
@@ -37,9 +49,9 @@ class CursesDisplay():
         self.window = curses.newwin(curses.LINES, curses.COLS)
         self.window.nodelay(1)
         # Create and configure main half-screen subwindows.
-        self.half_screen = curses.COLS//2
+        self.half_screen = curses.COLS // 2
         self.attacks = curses.newwin(curses.LINES-3, self.half_screen, 1, 0)
-        self.attacks_color = curses.color_pair(198)
+        self.attacks_color = curses.color_pair(197)
         self.attacks.attrset(self.attacks_color)
         self.attacks.addstr(1, 0, 'ATTACK STRINGS (KILL THESE)'.
                 center(self.half_screen, ' '), curses.A_UNDERLINE |
@@ -64,11 +76,12 @@ class CursesDisplay():
         self.refresh()
         self.window.nodelay(0)
 
-    def display_score(self, score, time, attack_limit):
-        self.score = ('''Score: {:>4}  Level: {:>4}  '''
-                '''Attacks remaining: {:>3}  Time: {:<8}'''.
+    def display_score(self, score, time, attacks_left, martyrs_left):
+        self.score = ('''Score: {:>4}  Level: {:>2}  '''
+                '''Attacks left: {:>2}  Non-comb. deaths left: {:>2}  '''
+                '''Time: {:<8}'''.
                 format(score,
-                    random.randint(1, 100), attack_limit, time))
+                    random.randint(1, 100), attacks_left, martyrs_left, time))
         self.stdscr.addstr(0, 0, self.score)
         self.stdscr.attrset(curses.color_pair(16))
         self.refresh()
@@ -92,39 +105,29 @@ class CursesDisplay():
     def display_attacks(self, attack):
         """Display attack string."""
         # QQQ Can this and display_noncomb() be merged, since func similar?
-        if self.attacks_row >= self.attacks_max:
-            self.end_game()
-        else:
-            self.attacks_row += 1
-            attack = str(self.attacks_row) + ' ' + attack
-            self.attacks.addstr(
-                    self.attacks_row, 1,
-                    attack.center(self.half_screen-2, ' '))
+        y = len(attack)
+        attack = str(y) + ' ' + attack[-1]
+        self.attacks.addstr(
+                y, 1,
+                attack.center(self.half_screen-2, ' '))
 
     def display_noncomb(self, noncombatant):
         """Display noncombatant string."""
-        if self.noncomb_row >= self.noncomb_max:
-            self.end_game()
-        else:
-            self.noncomb_row += 1
-            self.noncomb.addstr(
-                    self.noncomb_row, 1,
-                    noncombatant.center(self.half_screen-2, ' '))
+        self.noncomb.addstr(
+                len(noncombatant), 1,
+                noncombatant[-1].center(self.half_screen-2, ' '))
 
     def fade_out(self, object, y, x, length):
         """Make item fade out gradually.
 
         Intended for use with defeated attack strings.
         """
-        fade_colors = [
-                197, 203, 209, 215, 221, 227, 228, 229, 230, 231, 232,
-                255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
-                244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233]
-        for color in fade_colors:
+        for color in self.fade_colors[object]:
             object.chgat(y, x, length, curses.color_pair(color))
             self.refresh()
             curses.delay_output(40)
-        # QQQ this should happen while other things are happening.
+        # QQQ This should happen while other things are happening.
+        # QQQ We need different fade sequence for different starting color.
 
     def highlight_failure(self, object, y, x, length):
         """Reverse item and turn it the color of an attack.
