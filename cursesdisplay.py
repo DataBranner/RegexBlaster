@@ -65,7 +65,7 @@ class CursesDisplay():
 
     def display_score(self, score, time, attack_limit):
         self.score = ('''Score: {:>4}  Level: {:>4}  '''
-                '''Attacks remaining: {:>3}  Time : {:<8}'''.
+                '''Attacks remaining: {:>3}  Time: {:<8}'''.
                 format(score,
                     random.randint(1, 100), attack_limit, time))
         self.stdscr.addstr(0, 0, self.score)
@@ -95,6 +95,7 @@ class CursesDisplay():
             self.end_game()
         else:
             self.attacks_row += 1
+            attack = str(self.attacks_row) + ' ' + attack
             self.attacks.addstr(
                     self.attacks_row, 1,
                     attack.center(self.half_screen-2, ' '))
