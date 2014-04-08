@@ -1,7 +1,7 @@
 #! /usr/bin/python
-# regex_blaster_08.py
+# regex_blaster_11.py
 # David Prager Branner
-# 20140407
+# 20140408
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
@@ -152,4 +152,4 @@ def generate_string(length=5, typestring='aA', varying=False):
     return ''.join([random.choice(charset) for i in range(length)])             
 
 if __name__ == '__main__':
-    main()
+    curses.wrapper(main())
