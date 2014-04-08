@@ -67,6 +67,8 @@ class CursesDisplay():
         self.window.nodelay(0)
 
     def display_score(self):
+        # QQQ Since display_score is called from main, T can be removed here.
+        # QQQ Score format can be handled by Score class.
         if self.T.time_left < 0:
             self.end_game()
         else:
@@ -82,6 +84,7 @@ class CursesDisplay():
 
     def display_message(self):
         """Display message about game state."""
+        # QQQ message format can be handled by main.
         self.stdscr.addstr(
                 curses.LINES-2, 0, self.S.message.rjust(80, ' '), 
                 curses.color_pair(142))
@@ -93,6 +96,7 @@ class CursesDisplay():
 
     def display_defense(self):
         """Display user's defense string."""
+        # QQQ defense string format can be handled by main
         defense_line = 'defense: ' + self.S.defense
         # Defense line appears in white (color pair 16).
         self.stdscr.addstr(
@@ -103,7 +107,8 @@ class CursesDisplay():
 
     def display_attacks(self):
         """Display attack string."""
-        # Can this and display_noncomb() be merged?
+        # QQQ attack string format can be handled by main
+        # QQQ Can this and display_noncomb() be merged, since func similar?
         if self.attacks_row >= self.attacks_max:
             self.end_game()
         else:
@@ -114,6 +119,7 @@ class CursesDisplay():
 
     def display_noncomb(self):
         """Display noncombatant string."""
+        # QQQ noncombatant string format can be handled by main
         if self.noncomb_row >= self.noncomb_max:
             self.end_game()
         else:
