@@ -2,6 +2,7 @@
 # blaster.py
 # David Prager Branner
 # 20140330
+# As of 20140407, all this content had been incorporated into curses version.
 
 """Game to improve regex skills.
 
