@@ -1,5 +1,5 @@
 #! /usr/bin/python
-# regex_blaster_11.py
+# regex_blaster_13.py
 # David Prager Branner
 # 20140408
 
@@ -28,13 +28,6 @@ def main():
         main_loop(cd)
     except KeyboardInterrupt:
         cd.end_game()
-        # If ctrl-c, restore terminal settings.
-#        curses.nocbreak() # end character-break mode.
-#        cd.stdscr.keypad(0)
-#        curses.echo()
-#        curses.curs_set(1)
-        # Destroy window.
-#        curses.endwin()
 
 ###################
 # Body of program #
@@ -58,14 +51,12 @@ def main_loop(cd):
             cd.display_score(S.score, S.level, T.time_to_display_str, 
                     S.attack_limit-len(S.attack), 
                     S.attack_limit-len(S.noncombatant))
-#            cd.refresh() # this causes problems
     S.message = ('''Your player has been destroyed in battle. '''
             '''Game over; ctrl-c to close window.''')
     cd.display_message(S.message)
 #    curses.delay_output(4000)
     cd.stdscr.noutrefresh()
     curses.doupdate()
-#    cd.end_game()
 
 #######################
 # End of program body #
@@ -119,15 +110,12 @@ def attack_defend_cycle(cd):
         S.defense_record.add(S.defense_submitted)
         # Evaluate defense.
         S.assess_defense_single()
-        S.defense_submitted = ''
         # Act on attack_successful, collateral_damage
         S.score_defense()
-        S.defense = ''
         if S.attack_successful:
             # Fade and remove attack. 
             cd.fade_out(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
-            del S.attack[-1]
         else:
             cd.highlight_failure(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
@@ -138,7 +126,6 @@ def attack_defend_cycle(cd):
             # Fade and remove non-combatant. 
             cd.fade_out(
                     cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
-            del S.noncombatant[-1]
 
 charset_dict = {
         'a': string.ascii_lowercase,

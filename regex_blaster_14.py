@@ -1,7 +1,7 @@
 #! /usr/bin/python
-# regex_blaster_11.py
+# regex_blaster_14.py
 # David Prager Branner
-# 20140408
+# 20140409
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
