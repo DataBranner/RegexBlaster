@@ -1,6 +1,6 @@
 ## Regex Blaster Past Versions
 
- * 13 Much `Scorer` material moved into `Scorer` class from `main`. 
+ * 13 Much `Scorer` material moved into `Scorer` class from `main`. "Noncombatant" changed to "bystander"; all references to time removed from score-line at top of window.
 
  * 12 Game now ends once either the number of failed defenses or non-combatant deaths reach the maximum, filling the window. The count of the number left is not quite right yet. And the last of the failed defenses or non-combatant deaths does not get reversed.
 
