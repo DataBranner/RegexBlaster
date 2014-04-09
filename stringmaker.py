@@ -1,59 +1,82 @@
+#! /usr/bin/python
 # stringmaker.py
 # David Prager Branner
-# 20140407
+# 20140409
 
-"""Construct various "attack" strings for Regex Blaster."""
+"""Construct interesting strings for Regex Blaster."""
 
-import string
-import random
+# This file replaces a wholly different `stringmaker.py`, now moved to
+# OLD_WORKING/stringmaker_OLD.py.
 
-class StringMaker():
-    def __init__(self):
-        self.germ_w_space=False
-        self.germ_w_tab=False
-        self.germ_w_LF=False
-        self.germ_kinds = {
-                self.germ_w_space: ' ',
-                self.germ_w_tab: '\t',
-                self.germ_w_LF: '\n'}
-        self.fill_w_space=False
-        self.fill_w_tab=False
-        self.fill_w_LF=False
-        self.fill_kinds = {
-                self.fill_w_space: ' ',
-                self.fill_w_tab: '\t',
-                self.fill_w_LF: '\n'}
+import string as S
+import random as R
 
-    def add_cruft(self, base):
-        for kind in kinds:
-            if kind:
-                base += self.kinds[kind] * len(base) / 2
+# Character inventories:
+inventories = {
+        'a': S.ascii_lowercase,
+        'A': S.ascii_uppercase,
+        'n': S.digits,
+        }
+# Comment: Aim for interesting alternations of substrings made from a few
+# distinct characters, in order to draw user's attention to patterns rather
+# than cruft.
 
-    def make_string(self):
-        germ_stuff = string.ascii_lowercase
-        if self.germ_w_space:
-            germ_stuff += ' ' * 13
-        if self.germ_w_tab:
-            germ_stuff += '\t' * 13
-        if self.germ_w_LF:
-            germ_stuff += '\n' * 13
-        fill_stuff = string.ascii_uppercase
-        if self.fill_w_space:
-            fill_stuff += ' '
-        if self.fill_w_tab:
-            fill_stuff += '\t'
-        if self.fill_w_LF:
-            fill_stuff += '\n'
-        repeats = random.randint(2, 5)
-        string_length = random.randint(2, 5)
-        germ = ''.join(
-                [random.choice(germ_stuff) for i in range(string_length)])
-        string_length = random.randint(1, string_length+1)
-        string_w_repeats = ''
-        for i in range(repeats):
-            string_w_repeats += (germ + ''.join([random.choice(fill_stuff)
-                for i in range(string_length)]))
-        return string_w_repeats
+# Upper bound for any "maximum" values chosen randomly.
+upper = 6
 
-def string_w_spaces():
-    pass
+def dot():
+    """Return any character."""
+    # Select inventory at random.
+    inventory = R.choice(list(inventories))
+    # Select character at random from the inventory.
+    return R.choice(inventories[inventory])
+
+def curly_exact(fn, exact):
+    """Return an exact number of the outputs of `fn`.
+
+    This is the core function used by all the other repetition functions.
+    """
+    if not exact:
+        return ''
+    return ''.join([fn() for i in range(exact)])
+
+##################################################
+# Functions below are derivative of `curly_exact`.
+
+def star(fn):
+    """Return the repetition, zero or more, of the input."""
+    # Equivalent to `curly_min(0)`.
+    return curly_min(fn, 0)
+
+def plus(fn):
+    # Equivalent to `curly_min(1)`.
+    return curly_min(fn, 1)
+
+def curly_min(fn, m):
+    """Return random integer, zero or more.
+
+    Note that `n` >= `m`, and that in practice `n` is limited by `upper`.
+    """
+    n = R.randint(m, upper)
+    return curly_range(fn, m, n)
+
+def curly_max(fn, n):
+    return curly_range(fn, 0, n)
+
+def curly_range(fn, m, n):
+    exact = R.randint(m, n)
+    return curly_exact(fn, exact)
+
+##################################################
+
+# Patterns:
+patterns = {
+        '.': dot(),
+        '*': star,
+        '+': plus,
+        '{n}': curly_exact,
+        '{n,}': curly_min,
+        '{,n}': curly_max,
+        '{m, n}': curly_range
+        }
+
