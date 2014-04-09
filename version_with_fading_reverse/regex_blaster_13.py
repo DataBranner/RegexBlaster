@@ -57,7 +57,7 @@ def main_loop(cd):
             cd.display_score(S.score, S.level, T.time_to_display_str, 
                     S.attack_limit-len(S.attack), 
                     S.attack_limit-len(S.noncombatant))
-#            cd.refresh()
+            cd.refresh()
     S.message = ('''Your player has been destroyed in battle. '''
             '''Game over; ctrl-c to close window.''')
     cd.display_message(S.message)
