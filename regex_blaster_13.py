@@ -27,13 +27,14 @@ def main():
     try:
         main_loop(cd)
     except KeyboardInterrupt:
+        cd.end_game()
         # If ctrl-c, restore terminal settings.
-        curses.nocbreak() # end character-break mode.
-        cd.stdscr.keypad(0)
-        curses.echo()
-        curses.curs_set(1)
+#        curses.nocbreak() # end character-break mode.
+#        cd.stdscr.keypad(0)
+#        curses.echo()
+#        curses.curs_set(1)
         # Destroy window.
-        curses.endwin()
+#        curses.endwin()
 
 ###################
 # Body of program #
@@ -43,8 +44,8 @@ def main_loop(cd):
     """Endless loop until maximum failed defenses or non-comb death occurs."""
     # S.attack_limit > len(S.attack) because we need only the minimum failed
     #     defenses. 
-    while (S.attack_limit >= len(S.attack) and 
-            S.attack_limit >= len(S.noncombatant)):
+    while (S.attack_limit > len(S.attack) and 
+            S.attack_limit > len(S.noncombatant)):
         if T.time_limit and T.time_to_display < 0:
             cd.end_game()
         else:
@@ -52,26 +53,24 @@ def main_loop(cd):
             T.update()
             curses.delay_output(10)
             cd.display_defense(S.defense)
-            attack_defend_cycle(cd)
+            attack_defend_cycle()
             cd.display_message(S.message)
             cd.display_score(S.score, S.level, T.time_to_display_str, 
                     S.attack_limit-len(S.attack), 
                     S.attack_limit-len(S.noncombatant))
-#            cd.refresh()
-    S.message = ('''Your player has been destroyed in battle. '''
-            '''Game over; ctrl-c to close window.''')
+#            cd.refresh() # this causes problems
+    S.message = ('''Your player has been destroyed in battle. Game over.''')
     cd.display_message(S.message)
 #    curses.delay_output(4000)
     cd.stdscr.noutrefresh()
     curses.doupdate()
-    while True:
-        pass
+#    cd.end_game()
 
 #######################
 # End of program body #
 #######################
 
-def attack_defend_cycle(cd):
+def attack_defend_cycle():
     # Generate "attack" string (must be matched to avoid hit)
     if S.new_attacks:
         S.new_attacks = False
@@ -109,25 +108,12 @@ def attack_defend_cycle(cd):
     #    Unfinished defense string is, if possible, evaluated tentatively 
     #        against attack and noncombatant strings. (Not yet done. QQQ)
     if S.defense_submitted:
-        # Check defense against past regexes; invalidate if found.
-        if S.defense_submitted in S.defense_record:
-            S.message = 'This defense has already been used; invalid.'
-            return
-        # Otherwise, process defense, generate new attack/noncombatant strings.
-        S.new_attacks = True
-        S.new_noncomb = True
-        S.defense_record.add(S.defense_submitted)
-        # Evaluate defense.
-        S.assess_defense_single()
-        S.defense_submitted = ''
-        # Act on attack_successful, collateral_damage
-        S.score_defense()
-        S.defense = ''
+        S.after_defense_is_submitted()
+        cd.refresh()
         if S.attack_successful:
             # Fade and remove attack. 
             cd.fade_out(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
-            del S.attack[-1]
         else:
             cd.highlight_failure(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
@@ -138,7 +124,7 @@ def attack_defend_cycle(cd):
             # Fade and remove non-combatant. 
             cd.fade_out(
                     cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
-            del S.noncombatant[-1]
+        S.delete_used_up_strings()
 
 charset_dict = {
         'a': string.ascii_lowercase,

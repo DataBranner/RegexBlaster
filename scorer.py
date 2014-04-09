@@ -61,6 +61,14 @@ class Scorer():
             if not self.attack_successful:
                 self.message = 'Defense failed!'
 
+    def delete_used_up_strings(self):
+        self.defense_submitted = ''
+        self.defense = ''
+        if self.attack_successful:
+            del self.attack[-1]
+        if not self.collateral_damage:
+            del self.noncombatant[-1]
+
     def evaluate_defense(self, score_change='plus'):
         """Check for presence of scoreable operators and grade accordingly."""
         if score_change == 'plus':
@@ -103,3 +111,17 @@ class Scorer():
         tenpoints = '\(\?.+?\)'
         self.score += score_change * 9 * len(
                 re.findall(tenpoints, self.defense))
+
+    def after_defense_is_submitted(self):
+        # Check defense against past regexes; invalidate if found.
+        if self.defense_submitted in self.defense_record:
+            self.message = 'This defense has already been used; invalid.'
+            return
+        # Otherwise, process defense, generate new attack/noncombatant strings.
+        self.new_attacks = True
+        self.new_noncomb = True
+        self.defense_record.add(self.defense_submitted)
+        # Evaluate worth of defense.
+        self.assess_defense_single()
+        # Act on attack_successful, collateral_damage
+        self.score_defense()
