@@ -57,7 +57,7 @@ def main_loop(cd):
             cd.display_score(S.score, S.level, T.time_to_display_str, 
                     S.attack_limit-len(S.attack), 
                     S.attack_limit-len(S.noncombatant))
-#            cd.refresh()
+            cd.refresh()
     S.message = ('''Your player has been destroyed in battle. '''
             '''Game over; ctrl-c to close window.''')
     cd.display_message(S.message)
@@ -119,15 +119,12 @@ def attack_defend_cycle(cd):
         S.defense_record.add(S.defense_submitted)
         # Evaluate defense.
         S.assess_defense_single()
-        S.defense_submitted = ''
         # Act on attack_successful, collateral_damage
         S.score_defense()
-        S.defense = ''
         if S.attack_successful:
             # Fade and remove attack. 
             cd.fade_out(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
-            del S.attack[-1]
         else:
             cd.highlight_failure(
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
@@ -138,7 +135,6 @@ def attack_defend_cycle(cd):
             # Fade and remove non-combatant. 
             cd.fade_out(
                     cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
-            del S.noncombatant[-1]
 
 charset_dict = {
         'a': string.ascii_lowercase,
