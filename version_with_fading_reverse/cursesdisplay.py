@@ -78,8 +78,14 @@ class CursesDisplay():
         curses.doupdate()
 
     def end_game(self):
-        self.refresh()
-        self.window.nodelay(0)
+#        self.refresh()
+#        self.window.nodelay(0)
+        curses.nocbreak() # end character-break mode.
+        cd.stdscr.keypad(0)
+        curses.echo()
+        curses.curs_set(1)
+        # Destroy window.
+        curses.endwin()
 
     def display_score(self, score, level, time, attacks_left, noncombs_left):
         self.score = ('''Score: {:>4} Level: {:>2} '''

@@ -27,13 +27,7 @@ def main():
     try:
         main_loop(cd)
     except KeyboardInterrupt:
-        # If ctrl-c, restore terminal settings.
-        curses.nocbreak() # end character-break mode.
-        cd.stdscr.keypad(0)
-        curses.echo()
-        curses.curs_set(1)
-        # Destroy window.
-        curses.endwin()
+        cd.end_game()
 
 ###################
 # Body of program #
@@ -43,8 +37,8 @@ def main_loop(cd):
     """Endless loop until maximum failed defenses or non-comb death occurs."""
     # S.attack_limit > len(S.attack) because we need only the minimum failed
     #     defenses. 
-    while (S.attack_limit >= len(S.attack) and 
-            S.attack_limit >= len(S.noncombatant)):
+    while (S.attack_limit > len(S.attack) and 
+            S.attack_limit > len(S.noncombatant)):
         if T.time_limit and T.time_to_display < 0:
             cd.end_game()
         else:
@@ -57,15 +51,12 @@ def main_loop(cd):
             cd.display_score(S.score, S.level, T.time_to_display_str, 
                     S.attack_limit-len(S.attack), 
                     S.attack_limit-len(S.noncombatant))
-            cd.refresh()
     S.message = ('''Your player has been destroyed in battle. '''
             '''Game over; ctrl-c to close window.''')
     cd.display_message(S.message)
 #    curses.delay_output(4000)
     cd.stdscr.noutrefresh()
     curses.doupdate()
-    while True:
-        pass
 
 #######################
 # End of program body #
