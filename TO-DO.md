@@ -5,13 +5,18 @@
   2. levels, allowing progressively more complex attack strings
   2. generate attack/noncombatant strings formulaically
   2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish.
+  2. Useful to the learner:
+
+   3. short strings with repetition;
+   3. small character sets.
 
  1. Use `argparse` for some command-line options: 
 
-  2. `--debug`: turns on `random.seed()`; 
+  2. `--seed`: turns on `random.seed()`;
   2. `--log` (must first implement logging); 
+  2. `--debug`: (needed?)
   2. `--help`: show rules without running program?;
-  2. `--levels`: pre-defined series of levels, for systematic practice.
+  2. `--levels`: pre-defined series of levels, for systematic practice; alternative is random strings.
 
  1. Change list of failed attacks to dict, to enable counting. Bring both failed and defeated attacks back repeatedly.
 
