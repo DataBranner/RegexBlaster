@@ -1,5 +1,5 @@
 #! /usr/bin/python
-# regex_blaster_11.py
+# regex_blaster_13.py
 # David Prager Branner
 # 20140408
 
@@ -28,6 +28,13 @@ def main():
         main_loop(cd)
     except KeyboardInterrupt:
         cd.end_game()
+        # If ctrl-c, restore terminal settings.
+#        curses.nocbreak() # end character-break mode.
+#        cd.stdscr.keypad(0)
+#        curses.echo()
+#        curses.curs_set(1)
+        # Destroy window.
+#        curses.endwin()
 
 ###################
 # Body of program #
@@ -38,41 +45,42 @@ def main_loop(cd):
     # S.attack_limit > len(S.attack) because we need only the minimum failed
     #     defenses. 
     while (S.attack_limit > len(S.attack) and 
-            S.attack_limit > len(S.noncombatant)):
+            S.attack_limit > len(S.bystander)):
         if T.time_limit and T.time_to_display < 0:
             cd.end_game()
         else:
-            # Somewhere in this cycle the number of noncombatants left is wrong.
+            # Somewhere in this cycle the number of bystanders left is wrong.
             T.update()
             curses.delay_output(10)
             cd.display_defense(S.defense)
-            attack_defend_cycle(cd)
+            attack_defend_cycle()
             cd.display_message(S.message)
-            cd.display_score(S.score, S.level, T.time_to_display_str, 
+            cd.display_score(S.score, 
                     S.attack_limit-len(S.attack), 
-                    S.attack_limit-len(S.noncombatant))
-    S.message = ('''Your player has been destroyed in battle. '''
-            '''Game over; ctrl-c to close window.''')
+                    S.attack_limit-len(S.bystander))
+#            cd.refresh() # this causes problems
+    S.message = ('''Your player has been destroyed in battle. Game over.''')
     cd.display_message(S.message)
 #    curses.delay_output(4000)
     cd.stdscr.noutrefresh()
     curses.doupdate()
+#    cd.end_game()
 
 #######################
 # End of program body #
 #######################
 
-def attack_defend_cycle(cd):
+def attack_defend_cycle():
     # Generate "attack" string (must be matched to avoid hit)
     if S.new_attacks:
         S.new_attacks = False
         S.attack.append(generate_string())
         cd.display_attacks(S.attack)
-    # Generate "noncombatant" string (must be matched to avoid score-loss)
-    if S.new_noncomb:
-        S.new_noncomb = False
-        S.noncombatant.append(generate_string())
-        cd.display_noncomb(S.noncombatant)
+    # Generate "bystander" string (must be matched to avoid score-loss)
+    if S.new_bystander:
+        S.new_bystander = False
+        S.bystander.append(generate_string())
+        cd.display_bystander(S.bystander)
     #
     # Battle state loop.
     # Get next character in regex string.
@@ -94,24 +102,14 @@ def attack_defend_cycle(cd):
     # For checking other delete characters, use S.defense += str(c)
     else:
         S.defense += chr(c)
-    # Append to regex string and try against attack and non-combatant strings.
+    # Append to regex string and try against attack and bystander strings.
     # Two components: 
     #    Finished defense string is passed to assess_defense_single; 
     #    Unfinished defense string is, if possible, evaluated tentatively 
-    #        against attack and noncombatant strings. (Not yet done. QQQ)
+    #        against attack and bystander strings. (Not yet done. QQQ)
     if S.defense_submitted:
-        # Check defense against past regexes; invalidate if found.
-        if S.defense_submitted in S.defense_record:
-            S.message = 'This defense has already been used; invalid.'
-            return
-        # Otherwise, process defense, generate new attack/noncombatant strings.
-        S.new_attacks = True
-        S.new_noncomb = True
-        S.defense_record.add(S.defense_submitted)
-        # Evaluate defense.
-        S.assess_defense_single()
-        # Act on attack_successful, collateral_damage
-        S.score_defense()
+        S.after_defense_is_submitted()
+        cd.refresh()
         if S.attack_successful:
             # Fade and remove attack. 
             cd.fade_out(
@@ -121,11 +119,12 @@ def attack_defend_cycle(cd):
                     cd.attacks, len(S.attack), 1, cd.half_screen-2)
         if S.collateral_damage:
             cd.highlight_failure(
-                    cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
+                    cd.bystander, len(S.bystander), 1, cd.half_screen-2)
         else:
-            # Fade and remove non-combatant. 
+            # Fade and remove bystander. 
             cd.fade_out(
-                    cd.noncomb, len(S.noncombatant), 1, cd.half_screen-2)
+                    cd.bystander, len(S.bystander), 1, cd.half_screen-2)
+        S.delete_used_up_strings()
 
 charset_dict = {
         'a': string.ascii_lowercase,
