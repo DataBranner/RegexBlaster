@@ -2,13 +2,14 @@
 
  1. Need more productive attacks and noncombatants; revise `stringmaker.py` and incorporate into main program: 
 
-  2. levels, allowing progressively more complex attack strings
-  2. generate attack/noncombatant strings formulaically
+  2. levels, allowing progressively more complex attack strings;
+  2. generate attack/noncombatant strings formulaically;
+  2. multiple strings with the smae formulaic structure;
   2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish.
   2. Useful to the learner:
 
-   3. short strings with repetition;
-   3. small character sets.
+    3. short strings with repetition;
+    3. small character sets.
 
  1. Use `argparse` for some command-line options: 
 
