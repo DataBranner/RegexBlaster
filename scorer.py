@@ -14,14 +14,14 @@ class Scorer():
         self.attack_limit = attack_limit
         self.defense_record = set()
         self.defeated_attacks = []
-        self.martyred_noncombatants = []
+        self.martyred_bystanders = []
         self.defense = ''
         self.defense_submitted = ''
         self.attack = [None, None]
-        self.noncombatant = [None, None]
+        self.bystander = [None, None]
         self.message = ''
         self.new_attacks = True
-        self.new_noncomb = True
+        self.new_bystander = True
         self.attack_successful = None
         self.collateral_damage = None
 
@@ -38,10 +38,10 @@ class Scorer():
         # Non-targets (penalty for hitting); later need to handle multiple.
         self.collateral_damage = False
         try:
-            match = re.search(self.defense, self.noncombatant[-1]).group()
+            match = re.search(self.defense, self.bystander[-1]).group()
         except AttributeError or TypeError:
             match = None
-        if self.noncombatant[-1] == match:
+        if self.bystander[-1] == match:
             self.collateral_damage = True
 
     def score_defense(self):
@@ -49,7 +49,7 @@ class Scorer():
         if self.attack_successful and not self.collateral_damage:
             # Gain the number of points calculated by evaluate_defense.
             self.message = (
-                    'Successful defense without non-combatant casualties.')
+                    'Successful defense without bystander casualties.')
             self.defeated_attacks.append(self.attack[-1])
             self.evaluate_defense(score_change='plus')
 #            self.level += .1 # QQQ must decide when to increase level.
@@ -67,7 +67,7 @@ class Scorer():
         if self.attack_successful:
             del self.attack[-1]
         if not self.collateral_damage:
-            del self.noncombatant[-1]
+            del self.bystander[-1]
 
     def evaluate_defense(self, score_change='plus'):
         """Check for presence of scoreable operators and grade accordingly."""
@@ -117,9 +117,9 @@ class Scorer():
         if self.defense_submitted in self.defense_record:
             self.message = 'This defense has already been used; invalid.'
             return
-        # Otherwise, process defense, generate new attack/noncombatant strings.
+        # Otherwise, process defense, generate new attack/bystander strings.
         self.new_attacks = True
-        self.new_noncomb = True
+        self.new_bystander = True
         self.defense_record.add(self.defense_submitted)
         # Evaluate worth of defense.
         self.assess_defense_single()

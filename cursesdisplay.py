@@ -12,8 +12,8 @@ class CursesDisplay():
         self.maxlines = 30
         self.attacks_row = 2
         self.attacks_max = self.maxlines - 5
-        self.noncomb_row = 2
-        self.noncomb_max = self.maxlines - 5
+        self.bystander_row = 2
+        self.bystander_max = self.maxlines - 5
         self.set_up_curses()
         self.fade_colors = {
                 self.attacks: [
@@ -21,7 +21,7 @@ class CursesDisplay():
                 227, 228, 229, 230, 231, 232,
                 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
                 244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233],
-                self.noncomb: [
+                self.bystander: [
                 47, 48, 49, 50, 51, 52, 
                 88, 124, 160, 196, 232,
                 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
@@ -62,19 +62,19 @@ class CursesDisplay():
                 center(self.half_screen, ' '), curses.A_UNDERLINE |
                 self.attacks_color)
         self.attacks.box()
-        self.noncomb = curses.newwin(
+        self.bystander = curses.newwin(
                 curses.LINES-3, self.half_screen, 1, self.half_screen)
-        self.noncomb_color = curses.color_pair(47)
-        self.noncomb.attrset(self.noncomb_color)
-        self.noncomb.addstr(1, 0, '''NON-COMBATANT STRINGS (DO NOT KILL)'''.
+        self.bystander_color = curses.color_pair(47)
+        self.bystander.attrset(self.bystander_color)
+        self.bystander.addstr(1, 0, '''NON-COMBATANT STRINGS (DO NOT KILL)'''.
                 center(self.half_screen, ' '), curses.A_UNDERLINE)
-        self.noncomb.box()
+        self.bystander.box()
 
     def refresh(self):
         self.stdscr.noutrefresh()
         self.window.noutrefresh()
         self.attacks.noutrefresh()
-        self.noncomb.noutrefresh()
+        self.bystander.noutrefresh()
         curses.doupdate()
 
     def end_game(self):
@@ -87,11 +87,10 @@ class CursesDisplay():
         # Destroy window.
         curses.endwin()
 
-    def display_score(self, score, level, time, attacks_left, noncombs_left):
-        self.score = ('''Score: {:>4} Level: {:>2} '''
-                '''Attacks left: {:>2} Non-comb. deaths left: {:>2} '''
-                '''Time: {:<8}'''.
-                format(score, level, attacks_left, noncombs_left, time))
+    def display_score(self, score, attacks_left, bystanders_left):
+        self.score = ('''Score: {:>3}    Maximum attacks left: {:>2}    '''
+                '''Maximum bystander deaths left: {:>2}'''.
+                format(score, attacks_left, bystanders_left))
         self.stdscr.addstr(0, 0, self.score)
         self.stdscr.attrset(curses.color_pair(16))
         self.refresh()
@@ -104,7 +103,7 @@ class CursesDisplay():
 
     def display_defense(self, defense):
         """Display user's defense string."""
-        defense_line = 'defense: ' + defense
+        defense_line = 'Defense: ' + defense
         # Defense line appears in white (color pair 16).
         self.stdscr.addstr(
                 curses.LINES-1, 0, defense_line, curses.color_pair(16))
@@ -114,17 +113,17 @@ class CursesDisplay():
 
     def display_attacks(self, attack):
         """Display attack string."""
-        # QQQ Can this and display_noncomb() be merged, since func similar?
+        # QQQ Can this and display_bystander() be merged, since func similar?
         self.attacks.addstr(
                 len(attack), 1,
                 attack[-1].center(self.half_screen-2, ' '))
         self.refresh()
 
-    def display_noncomb(self, noncombatant):
-        """Display noncombatant string."""
-        self.noncomb.addstr(
-                len(noncombatant), 1,
-                noncombatant[-1].center(self.half_screen-2, ' '))
+    def display_bystander(self, bystander):
+        """Display bystander string."""
+        self.bystander.addstr(
+                len(bystander), 1,
+                bystander[-1].center(self.half_screen-2, ' '))
         self.refresh()
 
     def fade_out(self, object, y, x, length):
@@ -142,7 +141,7 @@ class CursesDisplay():
     def highlight_failure(self, object, y, x, length):
         """Reverse item and turn it the color of an attack.
 
-        Intended for use with failed attacks or non-combatants hit."""
+        Intended for use with failed attacks or bystanders hit."""
         for color in self.fade_colors['fade in and reverse']:
             object.chgat(
                     y, x, length, curses.A_REVERSE | curses.color_pair(color))
