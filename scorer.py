@@ -52,7 +52,7 @@ class Scorer():
                     'Successful defense without non-combatant casualties.')
             self.defeated_attacks.append(self.attack[-1])
             self.evaluate_defense(score_change='plus')
-            self.level += .1
+#            self.level += .1 # QQQ must decide when to increase level.
         else:
             # Lose the number of points calculated by evaluate_defense.
             self.evaluate_defense(score_change='minus')
