@@ -8,9 +8,9 @@ Outline of game:
 
  * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. If the defense string is invalid or fails to match the attack, the attack is successful and the user is a step closer to losing the game.
 
- * Computer also generates "noncombatant" string; matching these invalidates an otherwise successful defense and also brings the user closer to losing the game.
+ * Computer also generates "bystander" string, which you must not "kill" with your defense string. Matching a bystander string invalidates an otherwise successful defense and also brings the user closer to losing the game.
 
- * Game ends when the "attack" or "noncombatant" window fills with failures.
+ * Game ends when either the "attack" or "noncombatant" window fills with failures. By design there is no time pressure in this game.
 
 ---
 
