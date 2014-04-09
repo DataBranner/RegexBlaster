@@ -13,6 +13,8 @@
   2. `--help`: show rules without running program?;
   2. `--levels`: pre-defined series of levels, for systematic practice.
 
+ 1. Change list of failed attacks to dict, to enable counting. Bring both failed and defeated attacks back repeatedly.
+
  1. Handle failed attack and non-combatant strings without inadvertently pausing program.
 
  1. Apply regex to attack string and non-combatant strings, showing partial matches in real time.
