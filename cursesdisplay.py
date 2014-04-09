@@ -26,6 +26,11 @@ class CursesDisplay():
                 88, 124, 160, 196, 232,
                 255, 254, 253, 252, 251, 250, 249, 248, 247, 246, 245,
                 244, 243, 242, 241, 240, 239, 238, 237, 236, 235, 234, 233],
+                'fade in and reverse': [
+                233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 
+                245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+                232, 231, 230, 229, 228, 227,
+                221, 215, 209, 203, 197],
                 }
 
     def set_up_curses(self):
@@ -76,12 +81,11 @@ class CursesDisplay():
         self.refresh()
         self.window.nodelay(0)
 
-    def display_score(self, score, time, attacks_left, martyrs_left):
-        self.score = ('''Score: {:>4}  Level: {:>2}  '''
-                '''Attacks left: {:>2}  Non-comb. deaths left: {:>2}  '''
+    def display_score(self, score, level, time, attacks_left, noncombs_left):
+        self.score = ('''Score: {:>4} Level: {:>2} '''
+                '''Attacks left: {:>2} Non-comb. deaths left: {:>2} '''
                 '''Time: {:<8}'''.
-                format(score,
-                    random.randint(1, 100), attacks_left, martyrs_left, time))
+                format(score, level, attacks_left, noncombs_left, time))
         self.stdscr.addstr(0, 0, self.score)
         self.stdscr.attrset(curses.color_pair(16))
         self.refresh()
@@ -105,17 +109,17 @@ class CursesDisplay():
     def display_attacks(self, attack):
         """Display attack string."""
         # QQQ Can this and display_noncomb() be merged, since func similar?
-        y = len(attack)
-        attack = str(y) + ' ' + attack[-1]
         self.attacks.addstr(
-                y, 1,
-                attack.center(self.half_screen-2, ' '))
+                len(attack), 1,
+                attack[-1].center(self.half_screen-2, ' '))
+        self.refresh()
 
     def display_noncomb(self, noncombatant):
         """Display noncombatant string."""
         self.noncomb.addstr(
                 len(noncombatant), 1,
                 noncombatant[-1].center(self.half_screen-2, ' '))
+        self.refresh()
 
     def fade_out(self, object, y, x, length):
         """Make item fade out gradually.
@@ -133,4 +137,9 @@ class CursesDisplay():
         """Reverse item and turn it the color of an attack.
 
         Intended for use with failed attacks or non-combatants hit."""
-        object.chgat(y, x, length, curses.A_REVERSE | self.attacks_color)
+        for color in self.fade_colors['fade in and reverse']:
+            object.chgat(
+                    y, x, length, curses.A_REVERSE | curses.color_pair(color))
+            self.refresh()
+            curses.delay_output(40)
+#        object.chgat(y, x, length, curses.A_REVERSE | self.attacks_color)
