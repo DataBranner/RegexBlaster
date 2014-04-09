@@ -1,10 +1,10 @@
 ## Regex Blaster Past Versions
 
- * 13 Much `Scorer` material moved into `Scorer` class from `main`. "Noncombatant" changed to "bystander"; all references to time removed from score-line at top of window.
+ * 13 Much `Scorer` material moved into `Scorer` class from `main`. "Noncombatant" changed to "bystander", trying to demilitarize the game a little; all references to time removed from score-line at top of window.
 
  * 12 Game now ends once either the number of failed defenses or non-combatant deaths reach the maximum, filling the window. The count of the number left is not quite right yet. And the last of the failed defenses or non-combatant deaths does not get reversed.
 
- * 11 Pruned superfluous class attributes; moved `Timer` and `Scorer` instantiation to main. Changed timing to time passed, with time-limit optional. Revise `evaluate_defense` to both raise and lower score, depending on input, which comes only from `score_defense`. Added 14 working tests for lowering score. Added, then removed, `curses.wrapper()`. Changed `attack` and `noncombatant` to lists (initialized with `[None, None]`; their length is the `y` value in which their last element should be displayed in the appropriate window); when one of them reaches the size of the maximum number of lines, the game ends. Attacks now seem to work correctly, but non-combatants do not.
+ * 11 Pruned superfluous class attributes; moved `Timer` and `Scorer` instantiation to main. Changed timing to time passed, with time-limit optional. Revise `evaluate_defense` to both raise and lower score, depending on input, which comes only from `score_defense`. Added 14 working tests for lowering score. Added, then removed, `curses.wrapper()` — couldn't get it to work as expected. Changed `attack` and `noncombatant` to lists (initialized with `[None, None]` because upper border of window box and first line (with window-title) must be left untouched; their length is the `y` value in which their last element should be displayed in the appropriate window); when one of them reaches the size of the maximum number of lines, the game ends. Attacks now seem to work correctly, but non-combatants do not.
 
  * 10 Changes to `evaluate_defense` and 14 working tests.
 
