@@ -81,15 +81,15 @@ class CursesDisplay():
 #        self.refresh()
 #        self.window.nodelay(0)
         curses.nocbreak() # end character-break mode.
-        cd.stdscr.keypad(0)
+        self.stdscr.keypad(0)
         curses.echo()
         curses.curs_set(1)
         # Destroy window.
         curses.endwin()
 
     def display_score(self, score, attacks_left, bystanders_left):
-        self.score = ('''Score: {:>3}    Maximum attacks left: {:>2}    '''
-                '''Maximum bystander deaths left: {:>2}'''.
+        self.score = ('''Score: {:>3}    Minimum attacks left: {:>2}    '''
+                '''Maximum bystander hits left: {:>2}'''.
                 format(score, attacks_left, bystanders_left))
         self.stdscr.addstr(0, 0, self.score)
         self.stdscr.attrset(curses.color_pair(16))
