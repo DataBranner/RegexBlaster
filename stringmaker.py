@@ -24,10 +24,11 @@ inventories = {
 # Upper bound for any "maximum" values chosen randomly.
 upper = 6
 
-def dot():
+def dot(inventory = None):
     """Return any character."""
-    # Select inventory at random.
-    inventory = R.choice(list(inventories))
+    if not inventory or inventory not in inventories:
+        # Select inventory at random if a viable one is not provided.
+        inventory = R.choice(list(inventories))
     # Select character at random from the inventory.
     return R.choice(inventories[inventory])
 
@@ -39,6 +40,14 @@ def curly_exact(fn, exact):
     if not exact:
         return ''
     return ''.join([fn() for i in range(exact)])
+
+def charset(char_list):
+    if char_list[0] == '^':
+        while True:
+            char = dot()
+            if char not in char_list:
+                return char
+    return R.choice(list(set(char_list)))
 
 ##################################################
 # Functions below are derivative of `curly_exact`.
@@ -77,6 +86,7 @@ patterns = {
         '{n}': curly_exact,
         '{n,}': curly_min,
         '{,n}': curly_max,
-        '{m, n}': curly_range
+        '{m, n}': curly_range,
+        '[...]': charset,
         }
 
