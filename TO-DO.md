@@ -1,6 +1,10 @@
 ## Regex Blaster To-do List
 
- 1. Better name for `damage`; do we need it? Better to quantify how far from end of game we are. If so, implement it and `level`. Keep track of how many failed defenses there have been for each window.
+ 1. Need more productive attacks and noncombatants; revise `stringmaker.py` and incorporate into main program: 
+
+  2. levels, allowing progressively more complex attack strings
+  2. generate attack/noncombatant strings formulaically
+  2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish.
 
  1. Use `argparse` for some command-line options: 
 
@@ -10,12 +14,6 @@
   2. `--levels`: pre-defined series of levels, for systematic practice.
 
  1. Handle failed attack and non-combatant strings without inadvertently pausing program.
-
- 1. Need more productive attacks and noncombatants; revise `stringmaker.py` and incorporate into main program: 
-
-  2. levels, allowing progressively more complex attack strings
-  2. generate attack/noncombatant strings formulaically
-  2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish.
 
  1. Apply regex to attack string and non-combatant strings, showing partial matches in real time.
 
