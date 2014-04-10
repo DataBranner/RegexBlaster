@@ -85,3 +85,9 @@ def test_charset_04():
                 for i in range(range_value)])
         assert M.charset(char_list) not in char_list
 
+def test_curly_range_01():
+    """Test length of curly_range() output."""
+    for i in range(range_value):
+        m = R.randint(0, range_value)
+        n = R.randint(m, range_value)
+        assert m <= len(M.curly_range(M.dot, m, n)) <= n
