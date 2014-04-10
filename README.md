@@ -4,7 +4,13 @@
 
 Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface.
 
-Outline of game:
+Run at the command line:
+
+    python regex_regex_blaster_14.py
+
+and the contents of the terminal window will be replaced with the game window.
+
+**Outline of game**:
 
  * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. If the defense string is invalid or fails to match the attack, the attack is successful and the user is a step closer to losing the game.
 
