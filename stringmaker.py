@@ -22,9 +22,9 @@ inventories = {
 # than cruft.
 
 # Upper bound for any "maximum" values chosen randomly.
-upper = 6
+upper_limit = 6
 
-def dot(inventory = None):
+def dot(inventory=None):
     """Return any character."""
     if not inventory or inventory not in inventories:
         # Select inventory at random if a viable one is not provided.
@@ -51,6 +51,27 @@ def charset(char_list):
                 return char
     return R.choice(list(set(char_list)))
 
+def make_word(length=upper_limit, inventory=None):
+    """Generate a 'word' of given length."""
+    return ''.join([dot(inventory) for i in range(length)])
+
+def make_run(length=upper_limit, inventory=None):
+    """Generate a consecutive run of a single character."""
+    char = dot(inventory)
+    return ''.join([char for i in range(length)])
+
+def make_long_string(
+        words=upper_limit, inventory=None, dups=True, delim=' '):
+    """Generate a series of space-delimited 'words'."""
+    kind = [make_word, make_run]
+    words_made = [R.choice(kind)(inventory=inventory) for i in range(words)]
+    if dups:
+        return delim.join([R.choice(words_made) for i in range(words)])
+    else:
+        return delim.join(words_made)
+
+combinations = []
+
 ##################################################
 # Functions below are derivatives of others.
 
@@ -71,7 +92,7 @@ def plus(fn):
 def curly_min(fn, m):
     """Return random number of examples of fn, no fewer than `m`."""
 
-    n = R.randint(m, upper)
+    n = R.randint(m, upper_limit)
     return curly_range(fn, m, n)
 
 def curly_max(fn, n):
@@ -81,7 +102,7 @@ def curly_max(fn, n):
 def curly_range(fn, m, n):
     """Return random number of examples of fn, minimum `m`, maximum `n`.
 
-    Note that `n` >= `m`, and that in practice `n` is limited by `upper`.
+    Note that `n` >= `m`, and that in practice `n` is limited by `upper_limit`.
     """
     exact = R.randint(m, n)
     return curly_exact(fn, exact)
