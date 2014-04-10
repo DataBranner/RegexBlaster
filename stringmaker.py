@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # stringmaker.py
 # David Prager Branner
-# 20140409
+# 20140410
 
 """Construct interesting strings for Regex Blaster."""
 
@@ -42,6 +42,8 @@ def curly_exact(fn, exact):
     return ''.join([fn() for i in range(exact)])
 
 def charset(char_list):
+    """Return a single character selected from char_list."""
+    # Negation with `^`.
     if char_list[0] == '^':
         while True:
             char = dot()
@@ -58,21 +60,25 @@ def star(fn):
     return curly_min(fn, 0)
 
 def plus(fn):
+    """Return the repetition, one or more, of the input."""
     # Equivalent to `curly_min(1)`.
     return curly_min(fn, 1)
 
 def curly_min(fn, m):
-    """Return random integer, zero or more.
+    """Return random number of examples of fn, no fewer than `m`."""
 
-    Note that `n` >= `m`, and that in practice `n` is limited by `upper`.
-    """
     n = R.randint(m, upper)
     return curly_range(fn, m, n)
 
 def curly_max(fn, n):
+    """Return random number of examples of fn, no more than `n`."""
     return curly_range(fn, 0, n)
 
 def curly_range(fn, m, n):
+    """Return random number of examples of fn, minimum `m`, maximum `n`.
+
+    Note that `n` >= `m`, and that in practice `n` is limited by `upper`.
+    """
     exact = R.randint(m, n)
     return curly_exact(fn, exact)
 
