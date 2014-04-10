@@ -52,3 +52,36 @@ def test_plus_01():
         R.seed(seed)
         assert star == M.curly_min(M.dot, 1)
 
+def test_charset_01():
+    """Test use of charset with list."""
+    for i in range(range_value):
+        inventory = R.choice(list(M.inventories))
+        char_list = [R.choice(list(M.inventories[inventory])) 
+                for i in range(range_value)]
+        assert M.charset(char_list) in M.inventories[inventory]
+
+def test_charset_02():
+    """Test use of charset with string."""
+    for i in range(range_value):
+        inventory = R.choice(list(M.inventories))
+        char_list = ''.join([R.choice(list(M.inventories[inventory])) 
+                for i in range(range_value)])
+        assert M.charset(char_list) in M.inventories[inventory]
+
+def test_charset_03():
+    """Test use of negative charset with list."""
+    for i in range(range_value):
+        inventory = R.choice(list(M.inventories))
+        char_list = ['^'] + [R.choice(list(M.inventories[inventory])) 
+                for i in range(range_value)]
+        char = M.charset(char_list)
+        assert char not in char_list
+
+def test_charset_04():
+    """Test use of negative charset with string."""
+    for i in range(range_value):
+        inventory = R.choice(list(M.inventories))
+        char_list = '^' + ''.join([R.choice(list(M.inventories[inventory])) 
+                for i in range(range_value)])
+        assert M.charset(char_list) not in char_list
+
