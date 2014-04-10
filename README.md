@@ -8,7 +8,7 @@ Outline of game:
 
  * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. If the defense string is invalid or fails to match the attack, the attack is successful and the user is a step closer to losing the game.
 
- * Computer also generates "bystander" string, which you must not "kill" with your defense string. Matching a bystander string invalidates an otherwise successful defense and also brings the user closer to losing the game.
+ * Computer also generates "bystander" strings, which you must not "kill" with your defense string. Matching a bystander string invalidates an otherwise successful defense and also brings the user closer to losing the game.
 
  * Game ends when either the "attack" or "noncombatant" window fills with failures. By design there is no time pressure in this game.
 
@@ -28,6 +28,17 @@ Outline of game:
 
 Replacement is not yet dealt with but should also figure.
 
+### Background
+
+People who feel weak at regular expressions can improve if they practice. This ame is intended to help them do just that.
+
+I had originally planned a Space Invaders-type shoot'em-up game using JavaScript, in which you are attacked by strings and have to defend yourself with regex. In order to work up a proof-of-concept using the Python backend, I turned to the Curses library, and the resulting command-line interface seems to me effective.
+
+Early in the implementation, I found that the two most characteristic aspects of the shoot'em-up plan — racing the clock and moving targets — did not improve the learning aspect of the game. So I've moved instead to a model in which the user wins points by coming up with multiple and diverse "defense" strings, and time is not counted.
+
+### State of development
+
+The game presently (20140410) works but a good deal of further functionality has still to be implemented.
 
 ### To do
 
