@@ -58,9 +58,9 @@ class Scorer():
         else:
             # Lose the number of points calculated by evaluate_defense.
             self.evaluate_defense(score_change='minus')
-            if self.collateral_damage:
+            if self.collateral_damage and not self.invalid_defense:
                 self.message = 'Bystander casualties!'
-            if not self.attack_successful:
+            if not self.attack_successful and not self.invalid_defense:
                 self.message = 'Defense failed!'
 
     def delete_used_up_strings(self):
