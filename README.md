@@ -30,11 +30,11 @@ Replacement is not yet dealt with but should also figure.
 
 ### Background
 
-People who feel weak at regular expressions can improve if they practice. This ame is intended to help them do just that.
+People who feel weak at regular expressions can improve if they practice. This game is intended to help them do just that.
 
 I had originally planned a Space Invaders-type shoot'em-up game using JavaScript, in which you are attacked by strings and have to defend yourself with regex. In order to work up a proof-of-concept using the Python backend, I turned to the Curses library, and the resulting command-line interface seems to me effective.
 
-Early in the implementation, I found that the two most characteristic aspects of the shoot'em-up plan — racing the clock and moving targets — did not improve the learning aspect of the game. So I've moved instead to a model in which the user wins points by coming up with multiple and diverse "defense" strings, and time is not counted.
+Early in the implementation, I found that the two most characteristic aspects of the shoot'em-up plan — racing the clock and moving targets — did not improve the learning aspect of the game. A good regular expression may take a little time to compose, and moving text is needlessly difficult to focus on. So I've moved instead to a model in which the user wins points by coming up with multiple and diverse "defense" strings, and time is not counted.
 
 ### State of development
 
