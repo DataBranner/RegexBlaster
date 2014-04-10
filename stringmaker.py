@@ -61,7 +61,7 @@ def make_run(length=upper_limit, inventory=None):
     return ''.join([char for i in range(length)])
 
 def make_long_string(
-        words=upper_limit, inventory=None, dups=True, delim=' '):
+        words=upper_limit//2, inventory=None, dups=True, delim=' '):
     """Generate a series of space-delimited 'words'."""
     kind = [make_word, make_run]
     words_made = [R.choice(kind)(inventory=inventory) for i in range(words)]

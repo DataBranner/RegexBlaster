@@ -58,7 +58,7 @@ class CursesDisplay():
         self.attacks = curses.newwin(curses.LINES-3, self.half_screen, 1, 0)
         self.attacks_color = curses.color_pair(197)
         self.attacks.attrset(self.attacks_color)
-        self.attacks.addstr(1, 0, 'ATTACK STRINGS (KILL THESE)'.
+        self.attacks.addstr(1, 0, 'ATTACK STRINGS (MATCH THESE)'.
                 center(self.half_screen, ' '), curses.A_UNDERLINE |
                 self.attacks_color)
         self.attacks.box()
@@ -66,7 +66,7 @@ class CursesDisplay():
                 curses.LINES-3, self.half_screen, 1, self.half_screen)
         self.bystander_color = curses.color_pair(47)
         self.bystander.attrset(self.bystander_color)
-        self.bystander.addstr(1, 0, '''NON-COMBATANT STRINGS (DO NOT KILL)'''.
+        self.bystander.addstr(1, 0, '''BYSTANDER STRINGS (DO NOT MATCH)'''.
                 center(self.half_screen, ' '), curses.A_UNDERLINE)
         self.bystander.box()
 
