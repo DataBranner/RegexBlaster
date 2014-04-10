@@ -34,6 +34,15 @@ def test_dot_05():
         inventory = R.choice(list(M.inventories))
         assert M.dot(inventory) in M.inventories[inventory]
 
+def test_digit_01():
+    """Test use of digit()."""
+    for i in range(range_value):
+        seed = T.time()
+        R.seed(seed)
+        digit = M.digit()
+        R.seed(seed)
+        assert digit == M.dot('n')
+
 def test_star_01():
     """Test that plus() == curly_min(0)"""
     for i in range(range_value):

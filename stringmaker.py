@@ -52,7 +52,11 @@ def charset(char_list):
     return R.choice(list(set(char_list)))
 
 ##################################################
-# Functions below are derivative of `curly_exact`.
+# Functions below are derivatives of others.
+
+def digit():
+    """Return a single digit, equivalent to \d."""
+    return dot('n')
 
 def star(fn):
     """Return the repetition, zero or more, of the input."""
