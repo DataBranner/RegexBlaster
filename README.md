@@ -46,6 +46,27 @@ Early in the implementation, I found that the two most characteristic aspects of
 
 The game presently (20140410) works but a good deal of further functionality has still to be implemented.
 
+### Contents of this directory
+
+ * main file: `regex_blaster_14.py` (or subsequently numbered versions)
+ * supporting classes:
+
+   * `cursesdisplay.py`
+   * `scorer.py`
+   * `timer.py`
+   * `stringmaker.py`
+
+ * `pytest` test suite: `test/`
+ * directories containing files for my reference:
+
+   * `OLD_WORKING`
+   * `REFERENCE`
+
+ * this README and supporting development information:
+
+   * `VERSIONS.md`
+   * `TO-DO..md`
+
 ### To do
 
 To-do list is now a separate file `TO-DO.md` in this directory. (Moved after tag v10.)
