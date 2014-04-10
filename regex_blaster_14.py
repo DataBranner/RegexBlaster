@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # regex_blaster_14.py
 # David Prager Branner
-# 20140409
+# 20140410
 
 """Arcade game to help user practice regular expressions. Curses version."""
 
@@ -15,6 +15,7 @@ import random
 import string
 import traceback
 from cursesdisplay import CursesDisplay
+import stringmaker
 from timer import Timer
 from scorer import Scorer
 
@@ -74,8 +75,14 @@ def attack_defend_cycle():
     # Generate "attack" string (must be matched to avoid hit)
     if S.new_attacks:
         S.new_attacks = False
-        S.attack.append(generate_string())
+        if S.invalid_defense:
+            string = S.attack[-1]
+        else:
+            string = generate_string()
+        S.attack.append(string)
         cd.display_attacks(S.attack)
+        # Prepare for next cycle.
+        S.invalid_defense = False
     # Generate "bystander" string (must be matched to avoid score-loss)
     if S.new_bystander:
         S.new_bystander = False
@@ -126,30 +133,15 @@ def attack_defend_cycle():
                     cd.bystander, len(S.bystander), 1, cd.half_screen-2)
         S.delete_used_up_strings()
 
-charset_dict = {
-        'a': string.ascii_lowercase,
-        'A': string.ascii_uppercase,
-        '0': string.digits,
-        '.': string.punctuation,
-        }
- 
-def choose_charset(typestring='aA'):
-    charset = ''
-    for item in typestring:
-        if item == ' ':
-            continue
-        charset += charset_dict[item]
-    # Spaces must follow all others since their numbers are proportional.
-    if ' ' in typestring:
-        charset += ' ' * (len(charset) // 2)
-    return charset
- 
-def generate_string(length=5, typestring='aA', varying=False):
-    if varying:
-        # Must call a more complicated function, not yet written
-        pass
-    charset = choose_charset(typestring)
-    return ''.join([random.choice(charset) for i in range(length)])             
+choices = [
+        stringmaker.make_word,
+        stringmaker.make_run,
+        stringmaker.make_long_string,
+        ]
+
+def generate_string():
+    string = choices[(S.level // 3) % 3]()
+    return string
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # scorer.py
 # David Prager Branner
-# 20140408
+# 20140410
 
 import re
 import random # used only for dummy values
@@ -16,6 +16,7 @@ class Scorer():
         self.defeated_attacks = []
         self.martyred_bystanders = []
         self.defense = ''
+        self.invalid_defense = False
         self.defense_submitted = ''
         self.attack = [None, None]
         self.bystander = [None, None]
@@ -25,7 +26,7 @@ class Scorer():
         self.attack_successful = None
         self.collateral_damage = None
 
-    def assess_defense_single(self):
+    def assess_cycle(self):
         """Determine success, side-effects of defense in single-attack event."""
         # Attack; later we need to be able to handle multiple attacks.
         self.attack_successful = False
@@ -33,7 +34,7 @@ class Scorer():
             match = re.search(self.defense, self.attack[-1]).group()
         except AttributeError or TypeError:
             match = None
-        if self.attack[-1] == match:
+        if self.attack[-1] == match and not self.invalid_defense:
             self.attack_successful = True
         # Non-targets (penalty for hitting); later need to handle multiple.
         self.collateral_damage = False
@@ -44,6 +45,7 @@ class Scorer():
         if self.bystander[-1] == match:
             self.collateral_damage = True
 
+
     def score_defense(self):
         """Update score, damage, and level based on defense results."""
         if self.attack_successful and not self.collateral_damage:
@@ -52,12 +54,12 @@ class Scorer():
                     'Successful defense without bystander casualties.')
             self.defeated_attacks.append(self.attack[-1])
             self.evaluate_defense(score_change='plus')
-#            self.level += .1 # QQQ must decide when to increase level.
+            self.level += 1
         else:
             # Lose the number of points calculated by evaluate_defense.
             self.evaluate_defense(score_change='minus')
             if self.collateral_damage:
-                self.message = 'Non-combatant casualties!'
+                self.message = 'Bystander casualties!'
             if not self.attack_successful:
                 self.message = 'Defense failed!'
 
@@ -116,12 +118,13 @@ class Scorer():
         # Check defense against past regexes; invalidate if found.
         if self.defense_submitted in self.defense_record:
             self.message = 'This defense has already been used; invalid.'
-            return
+            self.invalid_defense = True
+            self.attack_successful = False
         # Otherwise, process defense, generate new attack/bystander strings.
         self.new_attacks = True
         self.new_bystander = True
         self.defense_record.add(self.defense_submitted)
         # Evaluate worth of defense.
-        self.assess_defense_single()
+        self.assess_cycle()
         # Act on attack_successful, collateral_damage
         self.score_defense()
