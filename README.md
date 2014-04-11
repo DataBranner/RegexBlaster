@@ -17,6 +17,11 @@ and the contents of the terminal window will be replaced with the game window.
  * Computer also generates "bystander" strings, which you must not "kill" with your defense string. Matching a bystander string invalidates an otherwise successful defense and also brings the user closer to losing the game.
 
  * Game ends when either the "attack" or "noncombatant" window fills with failures. By design there is no time pressure in this game.
+ * 
+
+**Gameplay examples**:
+
+ [Coming soon.]
 
 ---
 
