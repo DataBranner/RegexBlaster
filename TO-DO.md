@@ -5,6 +5,8 @@
   2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish;
   2. improve repetition of strings — make the point that this is the most useful way to improve.
 
+ 1. Add gameplay images to README.
+
  1. Use `argparse` for some command-line options: 
 
   2. `--seed`: turns on `random.seed()`;
