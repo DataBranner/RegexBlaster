@@ -1,15 +1,9 @@
 ## Regex Blaster To-do List
 
- 1. Need more productive attacks and noncombatants; revise `stringmaker.py` and incorporate into main program: 
+ 1. Need more productive attacks and noncombatants: 
 
-  2. levels, allowing progressively more complex attack strings;
-  2. generate attack/noncombatant strings formulaically;
-  2. multiple strings with the smae formulaic structure;
-  2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish.
-  2. Useful to the learner:
-
-    3. short strings with repetition;
-    3. small character sets.
+  2. noncombatant strings and attack strings should be related in such a way as to be difficult to distinguish;
+  2. improve repetition of strings — make the point that this is the most useful way to improve.
 
  1. Use `argparse` for some command-line options: 
 
