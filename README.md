@@ -2,7 +2,7 @@
 
 **An arcade game to practice regular expressions.**
 
-Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface.
+Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface. This is a proof-of-concept; more features are in the pipeline, but the code runs and the game plays right now.
 
 Run at the command line:
 
