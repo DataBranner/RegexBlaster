@@ -2,7 +2,7 @@
 
 **An arcade game to practice regular expressions.**
 
-Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface. This is a proof-of-concept; more features are in the pipeline, but the code runs and the game plays right now.
+Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4. All output is currently via command-line interface. This is a proof of concept; more features are in the pipeline, but the code runs and the game plays right now.
 
 Run at the command line:
 
@@ -17,7 +17,6 @@ and the contents of the terminal window will be replaced with the game window.
  * Computer also generates "bystander" strings, which you must not "kill" with your defense string. Matching a bystander string invalidates an otherwise successful defense and also brings the user closer to losing the game.
 
  * Game ends when either the "attack" or "noncombatant" window fills with failures. By design there is no time pressure in this game.
- * 
 
 **Gameplay examples**:
 
@@ -49,7 +48,7 @@ Early in the implementation, I found that the two most characteristic aspects of
 
 ### State of development
 
-The game presently (20140410) works but a good deal of further functionality has still to be implemented.
+The game presently (20140410) works but a good deal of further functionality has still to be implemented. What you have here is a proof of concept.
 
 ### Contents of this directory
 
