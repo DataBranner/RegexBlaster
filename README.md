@@ -58,6 +58,8 @@ Early in the implementation, I found that the two most characteristic aspects of
 
 The game presently (20140506) works but a good deal of further functionality has still to be implemented. What you have here is a proof of concept.
 
+It has been tested on Ubuntu 14.04 and Mac OS 10.9.2. It generally doesn't display well when used with a projector, which seems to disturb `curses`.
+
 ### Contents of this directory
 
  * main file: `CODE/regex_blaster.py`
