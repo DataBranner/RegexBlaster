@@ -12,9 +12,9 @@ and the contents of the terminal window will be replaced with the game window.
 
 To quit at any time, hit the ESC (escape) key.
 
-To use strings of a given length, use the option `-l` or `--length` followed by an integer:
+To use strings of a given length, use the option `-l` or `--length` followed by an integer. For instance, for two-character strings, use:
 
-    python CODE/regex_regex_blaster.py -l 2 # for two-character strings
+    python CODE/regex_regex_blaster.py -l 2
 
 This is a proof of concept; I'd be very grateful for suggestions and criticism.
 
