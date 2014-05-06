@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # timer.py
 # David Prager Branner
-# 20140407
+# 20140410
 
 import time
 import datetime
@@ -15,11 +15,11 @@ class Timer():
     def update(self):
         self.time_passed = time.time() - self.start_time
         if self.time_limit:
-            time_to_display = self.time_limit - self.time_passed
+            self.time_to_display = self.time_limit - self.time_passed
         else:
-            time_to_display = self.time_passed
+            self.time_to_display = self.time_passed
         self.time_to_display_str = str(
-                datetime.timedelta(seconds=round(time_to_display)))
+                datetime.timedelta(seconds=round(self.time_to_display)))
         if self.time_to_display_str[0:5] == '0:00:':
             self.time_to_display_str = self.time_to_display_str[5:]
         elif self.time_to_display_str[0:2] == '0:':
