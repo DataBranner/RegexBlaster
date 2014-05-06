@@ -1,8 +1,9 @@
 #! /usr/bin/python
 # cursesdisplay.py
 # David Prager Branner
-# 20140408
+# 20140506
 
+import sys
 import curses
 import random
 from scorer import Scorer
@@ -78,14 +79,13 @@ class CursesDisplay():
         curses.doupdate()
 
     def end_game(self):
-#        self.refresh()
-#        self.window.nodelay(0)
         curses.nocbreak() # end character-break mode.
         self.stdscr.keypad(0)
         curses.echo()
         curses.curs_set(1)
         # Destroy window.
         curses.endwin()
+        sys.exit(0)
 
     def display_score(self, score, attacks_left, bystanders_left):
         self.score = ('''Score: {:>3}    Minimum attacks left: {:>2}    '''

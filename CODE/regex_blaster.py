@@ -29,13 +29,6 @@ def main():
         main_loop(cd)
     except KeyboardInterrupt:
         cd.end_game()
-        # If ctrl-c, restore terminal settings.
-#        curses.nocbreak() # end character-break mode.
-#        cd.stdscr.keypad(0)
-#        curses.echo()
-#        curses.curs_set(1)
-        # Destroy window.
-#        curses.endwin()
 
 ###################
 # Body of program #
@@ -64,10 +57,8 @@ def main_loop(cd):
 #            cd.refresh() # this causes problems
     S.message = ('''Your player has been destroyed in battle. Game over.''')
     cd.display_message(S.message)
-#    curses.delay_output(4000)
-    cd.stdscr.noutrefresh()
-    curses.doupdate()
-#    cd.end_game()
+    cd.end_game()
+
 
 #######################
 # End of program body #
@@ -107,6 +98,7 @@ def attack_defend_cycle():
         S.defense_submitted = S.defense
     # Quit game: ESC.
     elif c == 27:
+        cd.end_game()
         # Restore terminal settings.
         curses.nocbreak() # end character-break mode.
         cd.stdscr.keypad(0)
