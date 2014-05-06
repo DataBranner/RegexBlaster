@@ -69,7 +69,7 @@ The game presently (20140506) works but a good deal of further functionality has
    * `stringmaker.py`
 
  * `pytest` test suite: `CODE/test/`
- * directories containing files for my reference (also in `CODE/`:
+ * directories containing files for my reference (also in `CODE/`):
 
    * `OLD_WORKING`
    * `REFERENCE`
