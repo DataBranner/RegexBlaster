@@ -6,11 +6,13 @@ Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4
 
 Run at the command line:
 
-    python regex_regex_blaster_15.py
+    python CODE/regex_regex_blaster.py
 
 and the contents of the terminal window will be replaced with the game window.
 
 To quit at any time, hit the ESC (escape) key.
+
+This is a proof of concept; I'd be very grateful for suggestions and criticism.
 
 **Outline of game**:
 
@@ -54,16 +56,16 @@ The game presently (20140506) works but a good deal of further functionality has
 
 ### Contents of this directory
 
- * main file: `regex_blaster_15.py` (or subsequently numbered versions)
- * supporting classes:
+ * main file: `CODE/regex_blaster.py`
+ * supporting classes (also in `CODE/`):
 
    * `cursesdisplay.py`
    * `scorer.py`
    * `timer.py`
    * `stringmaker.py`
 
- * `pytest` test suite: `test/`
- * directories containing files for my reference:
+ * `pytest` test suite: `CODE/test/`
+ * directories containing files for my reference (also in `CODE/`:
 
    * `OLD_WORKING`
    * `REFERENCE`
@@ -71,7 +73,7 @@ The game presently (20140506) works but a good deal of further functionality has
  * this README and supporting development information:
 
    * `VERSIONS.md`
-   * `TO-DO..md`
+   * `TO-DO.md`
 
 ### To do
 
