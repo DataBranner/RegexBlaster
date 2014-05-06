@@ -6,7 +6,7 @@ Currently runs at the command line in both Python 2.6 or 2.7 and Py3 through 3.4
 
 Run at the command line:
 
-    python regex_regex_blaster_14.py
+    python regex_regex_blaster_15.py
 
 and the contents of the terminal window will be replaced with the game window.
 
@@ -50,11 +50,11 @@ Early in the implementation, I found that the two most characteristic aspects of
 
 ### State of development
 
-The game presently (20140410) works but a good deal of further functionality has still to be implemented. What you have here is a proof of concept.
+The game presently (20140506) works but a good deal of further functionality has still to be implemented. What you have here is a proof of concept.
 
 ### Contents of this directory
 
- * main file: `regex_blaster_14.py` (or subsequently numbered versions)
+ * main file: `regex_blaster_15.py` (or subsequently numbered versions)
  * supporting classes:
 
    * `cursesdisplay.py`
