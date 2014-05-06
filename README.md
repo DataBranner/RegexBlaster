@@ -10,6 +10,8 @@ Run at the command line:
 
 and the contents of the terminal window will be replaced with the game window.
 
+To quit at any time, hit the ESC (escape) key.
+
 **Outline of game**:
 
  * Computer generates "attack" string; user must supply regex "defense" string to match it. Score is calculated only after return is pressed. If the defense string is invalid or fails to match the attack, the attack is successful and the user is a step closer to losing the game.
