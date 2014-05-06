@@ -6,6 +6,7 @@
 import sys
 import curses
 import random
+import time
 from scorer import Scorer
 
 class CursesDisplay():
@@ -79,7 +80,7 @@ class CursesDisplay():
         curses.doupdate()
 
     def end_game(self):
-        """End game clealy, restoring terminal to working state."""
+        """End game cleanly, restoring terminal to working state."""
         curses.nocbreak() # end character-break mode.
         self.stdscr.keypad(0)
         curses.echo()
