@@ -79,6 +79,7 @@ class CursesDisplay():
         curses.doupdate()
 
     def end_game(self):
+        """End game clealy, restoring terminal to working state."""
         curses.nocbreak() # end character-break mode.
         self.stdscr.keypad(0)
         curses.echo()

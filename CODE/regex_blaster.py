@@ -10,6 +10,7 @@ import sys
 #if sys.version_info[0] != 3:
 #    print('Python 3 required.')
 #    sys.exit()
+import argparse
 import curses
 import random
 import string
@@ -24,9 +25,9 @@ attack_limit = cd.attacks_max
 T = Timer()
 S = Scorer(attack_limit)
 
-def main():
+def main(args):
     try:
-        main_loop(cd)
+        main_loop(cd, args)
     except KeyboardInterrupt:
         cd.end_game()
 
@@ -34,12 +35,18 @@ def main():
 # Body of program #
 ###################
 
-def main_loop(cd):
+def main_loop(cd, args):
     """Endless loop until maximum failed defenses or non-comb death occurs."""
     # S.attack_limit > len(S.attack) because we need only the minimum failed
     #     defenses.
     S.message = ('Quit at any time with the ESC key.')
     cd.display_message(S.message)
+    # Supply command-line arguments, if present.
+    if args.repeat:
+        counter = args.repeat
+    else:
+        counter = 0
+    # Endless loop.
     while (S.attack_limit > len(S.attack) and
             S.attack_limit > len(S.bystander)):
         if T.time_limit and T.time_to_display < 0:
@@ -49,7 +56,7 @@ def main_loop(cd):
             T.update()
             curses.delay_output(10)
             cd.display_defense(S.defense)
-            attack_defend_cycle()
+            attack_defend_cycle(args)
             cd.display_message(S.message)
             cd.display_score(S.score,
                     S.attack_limit-len(S.attack),
@@ -64,14 +71,14 @@ def main_loop(cd):
 # End of program body #
 #######################
 
-def attack_defend_cycle():
+def attack_defend_cycle(args):
     # Generate "attack" string (must be matched to avoid hit)
     if S.new_attacks:
         S.new_attacks = False
         if S.invalid_defense:
             string = S.attack[-1]
         else:
-            string = generate_string()
+            string = generate_string(args.length)
         S.attack.append(string)
         cd.display_attacks(S.attack)
         # Prepare for next cycle.
@@ -79,7 +86,7 @@ def attack_defend_cycle():
     # Generate "bystander" string (must be matched to avoid score-loss)
     if S.new_bystander:
         S.new_bystander = False
-        S.bystander.append(generate_string())
+        S.bystander.append(generate_string(args.length))
         cd.display_bystander(S.bystander)
     #
     # Battle state loop.
@@ -143,9 +150,21 @@ choices = [
         stringmaker.make_long_string,
         ]
 
-def generate_string():
-    string = choices[(S.level // 3) % 3]()
+def generate_string(length):
+    """Generate string of given length, choosing from methods in choices."""
+    string = choices[(S.level // 3) % 3](length)
     return string
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--length', type=int,
+            help='length of base-strings')
+    parser.add_argument('-r', '--repeat', type=int,
+            help='repeat a given attack string this number of times')
+    try:
+        args = parser.parse_args()
+    except Exception as e:
+        print(e)
+    if not args.length:
+        args.length = 6
+    main(args)

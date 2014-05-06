@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # stringmaker.py
 # David Prager Branner
-# 20140410
+# 20140506
 
 """Construct interesting strings for Regex Blaster."""
 
@@ -61,10 +61,11 @@ def make_run(length=upper_limit, inventory=None):
     return ''.join([char for i in range(length)])
 
 def make_long_string(
-        words=upper_limit//2, inventory=None, dups=True, delim=' '):
+        length=upper_limit, words=upper_limit//2, inventory=None, dups=True, 
+        delim=' '):
     """Generate a series of space-delimited 'words'."""
     kind = [make_word, make_run]
-    words_made = [R.choice(kind)(inventory=inventory) for i in range(words)]
+    words_made = [R.choice(kind)(length, inventory=inventory) for i in range(words)]
     if dups:
         return delim.join([R.choice(words_made) for i in range(words)])
     else:
