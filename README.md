@@ -26,6 +26,8 @@ This is a proof of concept; I'd be very grateful for suggestions and criticism.
 
  * Game ends when either the "attack" or "noncombatant" window fills with failures. By design there is no time pressure in this game.
 
+The game should exit cleanly, but if it fails to, enter `stty sane` at the command prompt.
+
 **Gameplay examples**:
 
  [Coming soon.]
